@@ -1,0 +1,1824 @@
+"Code
+dff.gnspark.task.8..qq.qqqqqqqq.txt
+74.95 KB
+task.7.ssion.gnspark.1.q.qq.q.txt
+74.78 KB
+dff.gnspark.tsk.7.q.qq1.txt
+74.78 KB
+api.task.5.y.dff.gnspark.q.w.www.www.txt
+69.27 KB
+dfff gnsparkk.hrdeninggg.q.qq.q1.txt
+82.83 KB
+dfff.gnspark.pshh.gthubb.q.q,w.q.txt
+91.86 KB
+dff.gnspark.task.5.q..1q.txt
+47.98 KB
+serper.dev.q.qq1q.txt
+40 B
+clerk.credentiall.q.q..1q.txt
+1.08 KB
+neon-api.key.q.q.q.q.txt
+69 B
+open.ai.pltfrm.api.key.q.q,.txt
+164 B
+Baikk gsss dle gysssd ek ss gssd ke gysssd e d ke ss..(.MASTER SYSTEM PROMPT — AFFILIATE OS
+TASK 09 — DEMAND DISCOVERY FOUNDATION
+VERSION 1.0 — EXECUTION MASTER
+0. ROLE
+
+You are the principal software architect and implementation engineer responsible for continuing the Affiliate OS repository.
+
+You are NOT starting a new project.
+
+You are NOT redesigning the architecture.
+
+You are NOT creating a parallel Demand Discovery system.
+
+You must continue from the current repository state and preserve all previously completed work.
+
+Repository:
+
+Sparkmind-obp-off/Affiliate.os
+
+Branch:
+
+main
+
+1. PRIMARY OBJECTIVE
+
+Implement:
+
+TASK 09 — DEMAND DISCOVERY FOUNDATION
+
+The purpose of Task 09 is to establish the foundational Module 04 — Demand Discovery Engine as the upstream discovery layer of the Affiliate OS validation loop.
+
+The intended product loop is:
+
+DISCOVER → EVALUATE → SELECT → TEST → MEASURE → LEARN → ITERATE
+
+Task 09 establishes the DISCOVER foundation.
+
+It must produce structured, evidence-based demand signals that can later become input to the existing Opportunity Engine.
+
+2. NON-NEGOTIABLE EXECUTION RULE
+AUDIT FIRST — CODE SECOND
+
+Before creating or modifying any code:
+
+Inspect the current repository tree.
+Inspect README and architecture documentation.
+Inspect existing Module 04 files/stubs.
+Inspect Module 05 Opportunity Engine.
+Inspect Module 15 Identity/Tenancy.
+Inspect Module 16 Authorization/RBAC.
+Inspect migration numbering and migration conventions.
+Inspect existing API routing conventions.
+Inspect existing error/envelope conventions.
+Inspect existing tests and testing conventions.
+Inspect EXTERNAL_STACK_MASTER_INVENTORY.md.
+Determine what has already been implemented.
+Reuse existing abstractions wherever possible.
+
+Do NOT assume that the repository is identical to the specification.
+
+The repository is the source of truth for implementation details.
+
+3. CURRENT ARCHITECTURAL CONTEXT
+
+Previous foundation work already exists.
+
+At minimum, preserve the existing:
+
+Module 05 Opportunity Engine
+opportunity persistence
+opportunity lifecycle
+Module 15 Identity / Account / Workspace / Membership
+Module 16 RBAC / authorization
+tenant isolation
+existing API conventions
+existing migration chain
+existing error handling
+existing configuration/security model
+
+Do NOT rebuild these modules.
+
+Do NOT replace existing authorization.
+
+Do NOT create another tenancy mechanism.
+
+Do NOT create another opportunity model.
+
+4. MODULE OWNERSHIP
+
+Task 09 owns:
+
+Module 04 — Demand Discovery Engine
+
+Suggested conceptual boundary:
+
+src/modules/module-04-demand/
+
+├── domain/
+│   └── demand.ts
+│
+├── application/
+│   ├── demand-service.ts
+│   └── ports.ts
+│
+├── infrastructure/
+│   ├── persistence/
+│   └── http/
+│
+├── MODULE.md
+└── index.ts
+
+Use the repository's actual conventions if they differ.
+
+The module must expose a clean public contract.
+
+Other modules must NOT directly access Module 04 internal files or tables.
+
+5. TASK 09 SCOPE
+
+Implement the foundational demand discovery capability covering:
+
+A. Demand Signal Domain
+
+A demand signal represents evidence that a real problem, need, behavior, interest, or commercial intent exists.
+
+The signal should support concepts such as:
+
+problem
+search
+conversation
+content
+commercial intent
+transaction
+creator
+trend
+
+Use deterministic enums/types rather than arbitrary uncontrolled strings where appropriate.
+
+6. SIGNAL MODEL
+
+The implementation should support, at minimum:
+
+id
+workspace_id
+problem
+canonical_problem
+audience
+category
+keyword
+signal_type
+signal_value
+source_type
+source_ref
+observed_at
+collected_at
+confidence
+evidence
+status
+demand_score
+fingerprint
+created_at
+updated_at
+
+Do not blindly copy this model if the repository already contains an equivalent abstraction.
+
+First audit.
+
+Avoid redundant fields when an existing canonical structure already provides them.
+
+7. EVIDENCE-FIRST PRINCIPLE
+
+Demand Discovery MUST be evidence-first.
+
+A demand signal cannot be considered strong merely because:
+
+an AI model predicted it,
+a keyword sounds attractive,
+a trend appears interesting,
+a creator has many followers,
+or a hypothetical market assumption was made.
+
+The system must preserve evidence provenance.
+
+At minimum support:
+
+source_type
+source_ref
+observed_at
+evidence
+confidence
+
+The architecture must make it possible to answer:
+
+"Why does Affiliate OS believe this demand exists?"
+
+8. PROVIDER INDEPENDENCE
+
+Do NOT hard-code Task 09 around a single external provider.
+
+Do NOT make any of these mandatory dependencies for the foundation:
+
+TikTok API
+TikTok Shop API
+Serper.dev
+SerpApi
+OpenAI
+another LLM provider
+scraping infrastructure
+automatic crawling infrastructure
+
+Task 09 must support:
+
+manual / semi-automated evidence ingestion
+
+External connectors remain future work unless the existing repository explicitly requires a provider contract.
+
+The core must remain provider-independent.
+
+9. DEMAND NORMALIZATION
+
+Implement deterministic normalization for the core problem representation.
+
+For example:
+
+"  Susah Cari Produk Skincare Untuk Kulit Sensitif! "
+
+must produce a stable canonical representation suitable for comparison/deduplication.
+
+Normalization should address:
+
+Unicode normalization
+casing
+unnecessary punctuation
+repeated whitespace
+surrounding whitespace
+
+Do not implement aggressive semantic rewriting that could destroy meaning.
+
+10. DEMAND SCORING
+
+Implement a deterministic foundational demand score.
+
+The score must:
+
+be bounded
+be reproducible
+use explicit rules
+account for signal strength
+account for confidence
+account for signal type where appropriate
+
+Do NOT introduce an opaque AI-generated score.
+
+The scoring model must be understandable and testable.
+
+Do not pretend this is the final production intelligence model.
+
+This is the foundation.
+
+11. CONFIDENCE
+
+Support explicit confidence levels, for example:
+
+low
+medium
+high
+very_high
+
+Confidence must remain separate from raw signal value.
+
+The system should distinguish:
+
+"The observed signal is strong"
+
+from:
+
+"We are highly confident the evidence is reliable."
+
+12. DEMAND STATUS
+
+Create a controlled lifecycle for demand signals.
+
+A foundational status model may include:
+
+DISCOVERED
+OBSERVING
+VALIDATING
+CONFIRMED
+OPPORTUNITY_READY
+
+Do not create arbitrary/custom states.
+
+The status should communicate the maturity of the evidence.
+
+Do NOT automatically create an Opportunity merely because a signal reaches OPPORTUNITY_READY.
+
+Opportunity creation remains a separate controlled concern.
+
+13. DUPLICATE / FINGERPRINT PROTECTION
+
+Demand signals must have deterministic duplicate protection.
+
+Use a stable fingerprint derived from relevant normalized attributes.
+
+The fingerprint must be tenant-scoped.
+
+The database must enforce uniqueness.
+
+A duplicate submission must produce a safe deterministic conflict/result.
+
+Do NOT rely solely on application-memory deduplication.
+
+14. TENANCY
+
+Every persisted demand signal MUST belong to a workspace.
+
+The database must enforce:
+
+workspace_id
+
+and the repository must always query using tenant scope.
+
+Examples:
+
+findById(workspaceId, id)
+list(workspaceId, ...)
+
+Never expose:
+
+findById(id)
+
+for tenant-owned demand resources unless tenant authorization is already guaranteed by a higher-level abstraction and repository design explicitly preserves the boundary.
+
+Defense in depth is required.
+
+15. AUTHORIZATION
+
+Reuse Module 16 authorization.
+
+Do NOT create a second RBAC system.
+
+First inspect existing permission conventions.
+
+If not already present, introduce only the minimum required permissions for Module 04, such as:
+
+demand.read
+demand.create
+
+Then ensure role mappings are updated consistently.
+
+Authorization must happen before resource access.
+
+Deny by default.
+
+Cross-workspace access must be impossible.
+
+16. IDENTITY RESOLUTION
+
+Reuse Module 15.
+
+The request flow should remain conceptually:
+
+External Identity
+        ↓
+Internal Account
+        ↓
+Workspace
+        ↓
+Membership
+        ↓
+RBAC Permission
+        ↓
+Demand Resource
+
+Do NOT implement another authentication or tenancy mechanism inside Module 04.
+
+17. PERSISTENCE
+
+Create the required migration using the next migration number in the repository.
+
+Do NOT reuse an existing migration number.
+
+Do NOT rewrite previously applied migrations.
+
+Migration must be:
+
+forward-only
+deterministic
+safe
+tenant-aware
+constrained
+indexed appropriately
+
+Use the existing migration conventions.
+
+The demand table should have appropriate indexes for at least:
+
+workspace
+creation/update time
+status
+canonical problem
+
+Avoid speculative indexes.
+
+18. APPLICATION LAYER
+
+Implement application services/use cases for at least:
+
+Create Demand Signal
+
+Responsible for:
+
+validating input
+normalizing data
+calculating score
+classifying status
+generating fingerprint
+persisting signal
+Get Demand Signal
+
+Must be tenant-scoped.
+
+List Demand Signals
+
+Must be tenant-scoped.
+
+Must enforce a safe bounded limit.
+
+Do not expose unlimited queries.
+
+19. API
+
+Follow the existing API conventions.
+
+The API should expose the Module 04 capability under a clear demand namespace.
+
+A reasonable target is:
+
+/api/v1/demand
+
+with operations equivalent to:
+
+POST /api/v1/demand/signals
+
+GET /api/v1/demand/signals
+
+GET /api/v1/demand/signals/:id
+
+BUT:
+
+Do not blindly implement these paths if the repository already has an established convention that requires a different route.
+
+Audit first.
+
+All responses must use the existing response envelope.
+
+All errors must use the existing safe error mechanism.
+
+20. INPUT VALIDATION
+
+Reject:
+
+malformed payloads
+missing required fields
+invalid signal types
+invalid source types
+invalid confidence values
+invalid signal values
+invalid timestamps
+invalid IDs
+invalid workspace context
+excessive list limits
+
+Do not silently coerce invalid input into valid data.
+
+Never trust client-provided:
+
+workspace_id
+account_id
+role
+permission
+
+Tenant identity must come from authenticated server-side context.
+
+21. SECURITY
+
+Do NOT log:
+
+secrets
+API keys
+credentials
+authorization tokens
+database URLs
+sensitive authentication material
+
+Do not introduce:
+
+hardcoded credentials
+provider secrets
+development authentication bypasses
+cross-tenant query paths
+
+Respect existing .gitignore and secret-hygiene rules.
+
+22. OPPORTUNITY ENGINE INTEGRATION
+
+Task 09 must prepare Demand Discovery as an upstream input to Module 05.
+
+Conceptually:
+
+Module 04
+Demand Discovery
+      ↓
+Demand Signal
+      ↓
+Evidence / Score / Confidence
+      ↓
+Opportunity Evaluation
+      ↓
+Module 05
+Opportunity Engine
+
+Do NOT replace the existing Opportunity Engine.
+
+Do NOT duplicate opportunity evaluation logic inside Module 04.
+
+Do NOT automatically create opportunities.
+
+Only establish the clean boundary needed for future integration.
+
+If an existing Opportunity Engine input contract already supports demand signals, integrate through that contract.
+
+Otherwise, document the future integration point without expanding Task 09 scope.
+
+23. TESTING REQUIREMENTS
+
+Add tests following existing repository conventions.
+
+At minimum test:
+
+Domain
+valid signal types
+invalid signal types
+valid source types
+invalid source types
+confidence validation
+normalization
+deterministic scoring
+status classification
+Validation
+missing required fields
+malformed payload
+invalid signal value
+invalid timestamp
+invalid identifiers
+Deduplication
+identical fingerprint
+duplicate conflict
+tenant-scoped fingerprint
+Persistence
+create
+get
+list
+tenant filtering
+Authorization
+authorized user
+unauthorized user
+inactive account
+inactive workspace
+inactive membership
+missing permission
+Tenant Isolation
+
+Workspace A must never read Workspace B's demand signal.
+
+Test this explicitly.
+
+API
+
+Test:
+
+create
+list
+get
+malformed input
+unauthorized access
+cross-tenant access
+duplicate submission
+24. CONCURRENCY / DATA INTEGRITY
+
+Where the repository's existing architecture supports it, ensure duplicate protection remains database-safe under concurrent requests.
+
+The database unique constraint is authoritative.
+
+Do not claim concurrency safety merely because an in-memory test passes.
+
+If actual PostgreSQL concurrency cannot be executed in the available environment, document that limitation honestly.
+
+25. DOCUMENTATION
+
+Update relevant documentation.
+
+At minimum:
+
+Module 04 documentation
+README/current-state documentation
+API documentation if the repository has one
+
+Clearly state:
+
+TASK 09 — DEMAND DISCOVERY FOUNDATION
+
+and distinguish:
+
+Implemented
+
+from:
+
+Deferred
+26. EXPLICITLY DEFERRED FROM TASK 09
+
+Do NOT implement these as part of Task 09 unless the repository audit proves they are already required by an existing contract:
+
+TikTok API connector
+TikTok Shop API connector
+Serper provider integration
+SerpApi provider integration
+automatic scraping
+automatic crawling
+LLM-based discovery
+AI-only demand inference
+automated alerts
+automated opportunity creation
+creator recommendation engine
+content recommendation engine
+performance analytics
+revenue intelligence
+billing
+Duitku
+object storage
+queue infrastructure
+frontend/dashboard
+custom RBAC
+arbitrary demand statuses
+full workflow history/audit platform
+advanced attribution
+
+Task 09 is a foundation, not the complete Demand Discovery product.
+
+27. ARCHITECTURAL QUALITY GATE
+
+Before declaring Task 09 complete, verify:
+
+Architecture
+
+Module 04 has clear ownership.
+
+Public contract exists.
+
+No duplicate opportunity system exists.
+
+No duplicate tenancy system exists.
+
+No duplicate authorization system exists.
+
+Domain
+
+Demand Signal exists.
+
+Evidence is preserved.
+
+Normalization is deterministic.
+
+Score is deterministic.
+
+Confidence is explicit.
+
+Status is controlled.
+
+Persistence
+
+Migration exists.
+
+Workspace ownership enforced.
+
+Database uniqueness enforced.
+
+Useful indexes exist.
+
+Existing migrations untouched.
+
+Security
+
+Authentication reused.
+
+RBAC reused.
+
+Tenant isolation enforced.
+
+No secrets added.
+
+No client-controlled tenant authority.
+
+API
+
+Create works.
+
+List works.
+
+Get works.
+
+Errors are safe.
+
+Existing envelope convention preserved.
+
+Tests
+
+Domain tests.
+
+Validation tests.
+
+Persistence tests.
+
+RBAC tests.
+
+Tenant isolation tests.
+
+API tests.
+
+Duplicate tests.
+
+Documentation
+
+README updated.
+
+Module documentation updated.
+
+Deferred scope documented.
+
+28. VERIFICATION
+
+Run the repository's existing verification commands.
+
+Prefer:
+
+npm run verify
+
+which should include the repository's:
+
+typecheck
+lint
+test
+build
+
+If individual commands are required, run them separately.
+
+Do NOT claim verification passed unless the commands actually ran and passed.
+
+If infrastructure prevents full verification, report exactly:
+
+PASS
+PARTIAL
+BLOCKED
+
+with the concrete reason.
+
+Do not fabricate test results.
+
+29. GIT DISCIPLINE
+
+Do not rewrite Git history.
+
+Do not force-push.
+
+Do not modify unrelated tasks.
+
+Do not mix Task 10 work into Task 09.
+
+After implementation and verification, create one clean Task 09 commit where practical.
+
+Preferred commit message:
+
+feat(task-09): establish demand discovery foundation
+30. HARD STOP
+
+This is extremely important.
+
+After Task 09 is:
+
+audited,
+implemented,
+tested,
+documented,
+committed,
+
+STOP.
+
+Do NOT automatically continue to:
+
+Task 10
+Task 11
+external provider integration
+TikTok integration
+frontend
+analytics
+billing
+automation
+
+Do not interpret "complete Task 09" as permission to continue the roadmap.
+
+31. FINAL EXECUTION REPORT
+
+At the end, provide a concise report containing:
+
+TASK 09 STATUS
+
+Repository:
+Sparkmind-obp-off/Affiliate.os
+
+Task:
+Task 09 — Demand Discovery Foundation
+
+Status:
+PASS / PARTIAL / BLOCKED
+
+Implemented:
+- ...
+
+Tests:
+- ...
+
+Verification:
+- ...
+
+Commit:
+<actual commit SHA>
+
+Deferred:
+- ...
+
+Known limitations:
+- ...
+
+Only report facts actually verified from the repository.
+
+32. FINAL PRINCIPLE
+
+The goal of Task 09 is NOT to build every possible Demand Discovery feature.
+
+The goal is to establish a clean, secure, tenant-aware, evidence-first Demand Discovery foundation that fits naturally upstream of the existing Opportunity Engine.
+
+The architectural chain must remain:
+
+IDENTITY
+   ↓
+ACCOUNT
+   ↓
+WORKSPACE / TENANT
+   ↓
+MEMBERSHIP
+   ↓
+RBAC
+   ↓
+DEMAND DISCOVERY
+   ↓
+OPPORTUNITY ENGINE
+   ↓
+WORKFLOW
+   ↓
+FUTURE TEST / PERFORMANCE / REVENUE
+
+Preserve what already works.
+
+Extend only what Task 09 owns.
+
+AUDIT → IMPLEMENT → TEST → VERIFY → COMMIT → HARD STOP.)dnd kew nnti dmd wjibbd me dployyd ke via atud ke via d ke cf d ke byok d ke gyssss wkns gssd ke gysssd ek ss gssd kek gyssss dke sss...!nnnn
+Saya akan mengerjakan Task 09 saja pada repository existing Sparkmind-obp-off/Affiliate.os branch main, lalu verifikasi, commit, push ke repository yang sama, dan deploy ke Cloudflare melalui BYOK sesuai permintaan.
+
+Catatan sebelum mulai:
+
+Jika repo ternyata memakai framework non-default (mis. Next.js/OpenNext), preview dan one-click deploy platform tidak tersedia; build/deploy harus dilakukan di sandbox Linux dan mungkin perlu iterasi tambahan.
+File unggahan menampilkan credential rahasia (termasuk CLERK_SECRET_KEY dan kemungkinan kunci API lain). Saya tidak akan menyalin atau meng-commit credential tersebut. Karena sudah terekspos dalam percakapan/file, credential terkait sebaiknya segera dirotasi setelah pekerjaan ini.
+Saya akan mengaudit repo sebagai sumber kebenaran dan tidak menggunakan file Diff/session-export sebagai source code.
+activate_ai_developer_skill
+Lihat
+Berpikir Mendalam
+Total: 6 Tugas
+6 tugas yang harus dilakukan tersisa
+Audit repository, baseline Task 08, architecture, migrations, conventions, and uploaded Task 09 specification
+Implement Module 04 demand domain, persistence, services, authorization, and API integration
+Add comprehensive Task 09 tests and update project documentation
+Run full verification and resolve all failures
+Commit Task 09 and push main to existing GitHub repository
+Configure BYOK Cloudflare, deploy existing project, and verify production
+Setup GitHub Environment
+Lihat
+List Directory
+/home/user/webapp
+Lihat
+Read File
+/home/user/uploaded_files/dff.gnspark.task.8..qq.qqqqqqqq.txt
+Lihat
+     1	"Code
+     2	task.7.ssion.gnspark.1.q.qq.q.txt
+     3	74.78 KB
+...
+  1997	Read File
+  1998	/home/user/webapp/src/app/create-app.ts
+  1999	Lihat
+  2000	     1	import { Hono } from 'hono'
+Bash Command
+cd /home/user/webapp && git status --short --branch && git remote -v && git log -10 --oneline --decorate && git branch --show-current
+Lihat
+## main...origin/main
+origin	https://github.com/Sparkmind-obp-off/Affiliate.os.git (fetch)
+origin	https://github.com/Sparkmind-obp-off/Affiliate.os.git (push)
+...
+f2cc9c0 Add files via upload
+d91f9cf Create Dff.gnspark
+14c5b4c feat(task-05): complete auth secret and production verification
+main
+Exit Code: 0
+Find Files
+src/modules/**/*
+Lihat
+Find Files
+migrations/*
+Lihat
+Find Files
+tests/**/*
+Lihat
+Find Files
+**/*EXTERNAL_STACK_MASTER_INVENTORY*
+Lihat
+Bash Command
+cd /home/user/webapp && git pull --ff-only origin main && printf '\nModule 04 files:\n' && find src/modules/module-04-demand -type f -maxdepth 5 | sort && printf '\nMigrations:\n' && ls -1 migrations && printf '\nDemand tests:\n' && find tests -type f | grep -E 'demand|authorization|architecture' | sort
+Lihat
+From https://github.com/Sparkmind-obp-off/Affiliate.os
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+...
+tests/architecture/module-16-authorization.test.ts
+tests/integration/opportunity-authorization-api.test.ts
+tests/unit/authorization.test.ts
+tests/unit/demand-discovery.test.ts
+Exit Code: 0
+Read File
+/home/user/webapp/src/modules/module-04-demand/domain/demand.ts
+Lihat
+     1	export const DEMAND_SIGNAL_TYPES = [
+     2	  'problem', 'search', 'conversation', 'content', 'commercial_intent',
+     3	  'transaction', 'creator', 'trend',
+...
+    76	  if (score >= 65) return 'CONFIRMED'
+    77	  if (score >= 40) return 'VALIDATING'
+    78	  return 'DISCOVERED'
+    79	}
+Read File
+/home/user/webapp/src/modules/module-04-demand/application/ports.ts
+Lihat
+     1	import type { DemandSignal, DemandSignalInput } from '../domain/demand.js'
+     2	
+     3	export interface DemandSignalRepository {
+...
+    11	  duplicate: boolean
+    12	}
+    13	
+    14	export type DemandSignalDraft = DemandSignalInput
+Read File
+/home/user/webapp/src/modules/module-04-demand/application/demand-service.ts
+Lihat
+     1	import { AppError } from '../../../shared/errors/app-error.js'
+     2	import {
+     3	  calculateDemandScore,
+...
+   112	
+   113	function isUniqueViolation(error: unknown): boolean {
+   114	  return typeof error === 'object' && error !== null && 'code' in error && (error as { code?: string }).code === ...
+   115	}
+Read File
+/home/user/webapp/src/modules/module-04-demand/infrastructure/persistence/postgres-demand-repository.ts
+Lihat
+     1	import { Pool } from 'pg'
+     2	import type { DemandSignalRepository } from '../../application/ports.js'
+     3	import type { DemandSignal } from '../../domain/demand.js'
+...
+    48	    confidence: row.confidence, evidence: row.evidence, status: row.status, demandScore: Number(row.demand_score)...
+    49	    createdAt: row.created_at.toISOString(), updatedAt: row.updated_at.toISOString(),
+    50	  }
+    51	}
+Read File
+/home/user/webapp/src/modules/module-04-demand/infrastructure/http/demand-routes.ts
+Lihat
+     1	import { Hono, type Context } from 'hono'
+     2	import { AppError } from '../../../../shared/errors/app-error.js'
+     3	import { successEnvelope } from '../../../../shared/http/envelope.js'
+...
+    56	  const workspaceId = await authenticate(c, 'demand.read')
+    57	  const signal = await getDemandSignal(c.req.param('id'), workspaceId, resolveRepository(c))
+    58	  return c.json(successEnvelope({ signal }, { requestId: ctx.requestId, correlationId: ctx.correlationId }))
+    59	})
+Read File
+/home/user/webapp/migrations/0006_module_04_demand_discovery.sql
+Lihat
+     1	-- TASK 09: Demand Discovery foundation.
+     2	-- Manual / semi-automated evidence ingestion only; provider connectors remain deferred.
+     3	
+...
+    34	
+    35	INSERT INTO module_16.permissions (key, description) VALUES
+    36	  ('demand.read', 'Read workspace-owned demand discovery signals'),
+    37	  ('demand.create', 'Create workspace-owned demand discovery signals');
+Read File
+/home/user/webapp/tests/unit/demand-discovery.test.ts
+Lihat
+     1	import { describe, expect, it } from 'vitest'
+     2	import {
+     3	  calculateDemandScore,
+...
+    69	    await expect(repository.findById(OTHER_WORKSPACE, ID)).resolves.toBeNull()
+    70	    await expect(createDemandSignal(input, 'not-a-uuid', repository)).rejects.toMatchObject({ code: 'VALIDATION_E...
+    71	  })
+    72	})
+Read File
+/home/user/webapp/src/modules/module-16-security/domain/authorization.ts
+Lihat
+     1	import type { ResolvedIdentityContext } from '@modules/module-15-identity'
+     2	
+     3	export const PERMISSIONS = [
+...
+    34	  if (!isPermission(permission) || !granted.includes(permission)) return deny('missing_permission')
+    35	  if (resource && resource.workspaceId !== workspace.id) return deny('cross_tenant_resource')
+    36	  return { effect: 'ALLOW', reason: 'authorized' }
+    37	}
+Read File
+/home/user/webapp/src/app/routes/api-v1.ts
+Lihat
+     1	import { Hono } from 'hono'
+     2	import { successEnvelope } from '../../shared/http/envelope.js'
+     3	import { opportunityRoutes } from '@modules/module-05-opportunity'
+...
+    32	})
+    33	apiV1.route('/affiliate', opportunityRoutes)
+    34	apiV1.route('/', demandRoutes)
+    35	apiV1.route('/identity', identityRoutes)
+Read File
+/home/user/webapp/src/modules/module-04-demand/index.ts
+Lihat
+     1	/** Public contract for Demand Discovery Engine (Task 09). */
+     2	export const MODULE_ID = 'module-04-demand' as const
+     3	export const MODULE_TITLE = 'Demand Discovery Engine' as const
+...
+    14	  type DemandSourceType, type DemandStatus,
+    15	} from './domain/demand.js'
+    16	export { PostgresDemandSignalRepository } from './infrastructure/persistence/postgres-demand-repository.js'
+    17	export { createPostgresDemandSignalRepository } from './infrastructure/persistence/postgres-client.js'
+Read File
+/home/user/webapp/src/modules/module-04-demand/MODULE.md
+Lihat
+     1	# module-04-demand
+     2	
+     3	**Title:** Demand Discovery Engine
+...
+    16	- Evidence-first normalization, canonical problem derivation, confidence, score, and status.
+    17	- PostgreSQL persistence scoped by `workspace_id`.
+    18	- Module 16 RBAC for `demand.read` and `demand.create`.
+    19	- Provider connectors, scraping, AI-only inference, alerts, and automatic opportunity creation remain deferred.
+Read File
+/home/user/webapp/package.json
+Lihat
+     1	{
+     2	  "name": "affiliate-os",
+     3	  "version": "0.1.0",
+...
+    41	    "vitest": "^2.1.8",
+    42	    "wrangler": "^3.99.0"
+    43	  }
+    44	}
+Read File
+/home/user/webapp/docs/EXTERNAL_STACK_MASTER_INVENTORY.md
+Lihat
+     1	# AFFILIATE OS — EXTERNAL STACK MASTER INVENTORY
+     2	
+     3	**Version:** v1.0  
+...
+   579	- existing Module 05 persistence/migration architecture
+   580	- existing deployment configuration
+   581	
+   582	This inventory is an architectural dependency map, not a claim that every listed provider is already connected or...
+Read File
+/home/user/webapp/README.md
+Lihat
+     1	# Affiliate OS v1.0
+     2	
+     3	Modular SaaS Operating System for affiliate intelligence, content operations,
+...
+   376	- **Production URL:** https://affiliate-os.pages.dev
+   377	- **Status:** ✅ Active
+   378	- **Tech stack:** Hono + TypeScript + Zod + Vitest + Wrangler
+   379	- **Last updated:** 2026-09-03 (TASK 08 opportunity workflow and lifecycle foundation)
+Read File
+/home/user/webapp/src/modules/module-04-demand/infrastructure/persistence/postgres-client.ts
+Lihat
+     1	import { Pool } from 'pg'
+     2	import { PostgresDemandSignalRepository } from './postgres-demand-repository.js'
+     3	
+...
+    10	    pools.set(key, pool)
+    11	  }
+    12	  return new PostgresDemandSignalRepository(pool)
+    13	}
+Read File
+/home/user/webapp/src/app/types.ts
+Lihat
+     1	import type { AppConfig } from '../shared/config/env.js'
+     2	import type { Logger } from '../shared/logging/logger.js'
+     3	import type { RequestContext } from '../shared/http/request-context.js'
+...
+    31	export type AppEnv = {
+    32	  Bindings: Bindings
+    33	  Variables: Variables
+    34	}
+Read File
+/home/user/webapp/tests/integration/opportunity-lifecycle-api.test.ts
+Lihat
+     1	import { describe, expect, it } from 'vitest'
+     2	import { createApp } from '../../src/app/create-app.js'
+     3	import { AppError } from '../../src/shared/errors/app-error.js'
+...
+   143	      expect(response.status).toBe(403)
+   144	    }
+   145	  })
+   146	})
+Read File
+/home/user/webapp/tests/unit/opportunity-persistence.test.ts
+Lihat
+     1	import { describe, expect, it, vi } from 'vitest'
+     2	import {
+     3	  PostgresOpportunityRepository,
+...
+    70	    const repository = new PostgresOpportunityRepository(db)
+    71	    await expect(repository.findByRef(WORKSPACE, 'OPP-00124')).rejects.toMatchObject({ code: 'INTERNAL_ERROR' })
+    72	  })
+    73	})
+Read File
+/home/user/webapp/tests/unit/authorization.test.ts
+Lihat
+     1	import { describe, expect, it } from 'vitest'
+     2	import type { ResolvedIdentityContext } from '@modules/module-15-identity'
+     3	import {
+...
+   110	    const request = { context: context('member'), permission: 'workspace.manage' as Permission }
+   111	    expect(() => requirePermission(request)).toThrowError(expect.objectContaining({ code: 'FORBIDDEN', message: '...
+   112	  })
+   113	})
+Read File
+/home/user/webapp/migrations/README.md
+Lihat
+     1	# Migrations — Affiliate OS
+     2	
+     3	PostgreSQL is the production database (DOC 24 §314). SQLite, in-memory and
+...
+    59	records only the permissions required by currently implemented workspace and opportunity flows.
+    60	The deterministic role-permission matrix remains application policy in Module 16.
+    61	Migration `0005` reconciles legacy `EVALUATED` rows to `draft`, constrains the lifecycle
+    62	vocabulary, adds `opportunity.update`, and indexes tenant-scoped status queries.
+Bash Command
+cd /home/user/webapp && git show --stat --oneline 286e527 && git show --stat --oneline 9919cff && git show --stat --oneline 1a3b5e9 && git diff a15a6e5..HEAD -- README.md migrations/README.md src/modules/module-04-demand/MODULE.md
+Lihat
+286e527 feat(task-09): establish demand discovery foundation
+ migrations/0006_module_04_demand_discovery.sql     |  37 ++++++++
+ src/app/routes/api-v1.ts                           |  38 +-------
+...
++- Evidence-first normalization, canonical problem derivation, confidence, score, and status.
++- PostgreSQL persistence scoped by `workspace_id`.
++- Module 16 RBAC for `demand.read` and `demand.create`.
++- Provider connectors, scraping, AI-only inference, alerts, and automatic opportunity creation remain deferred.
+Exit Code: 0
+Bash Command
+cd /home/user/webapp && npm run verify
+Lihat
+🔄 Background Task Started
+Shell ID: bash_6611c396
+Command: cd /home/user/webapp && npm run verify
+Status: running
+Status: running
+Bash Output
+Lihat
+Read File
+/home/user/webapp/src/modules/module-05-opportunity/application/opportunity-lifecycle.ts
+Lihat
+     1	import { AppError } from '../../../shared/errors/app-error.js'
+     2	import { evaluateOpportunity } from '../domain/evaluator.js'
+     3	import type { OpportunityCandidate } from '../domain/signals.js'
+...
+   136	  return { ...describeScoringModel().versions }
+   137	}
+   138	
+   139	export type { OpportunityCandidate }
+Read File
+/home/user/webapp/src/shared/errors/app-error.ts
+Lihat
+     1	import {
+     2	  ERROR_CODES,
+     3	  ERROR_HTTP_STATUS,
+...
+    76	
+    77	export function isAppError(value: unknown): value is AppError {
+    78	  return value instanceof AppError
+    79	}
+Read File
+/home/user/webapp/tsconfig.json
+Lihat
+     1	{
+     2	  "compilerOptions": {
+     3	    "target": "ES2022",
+...
+    26	  },
+    27	  "include": ["src/**/*.ts", "tests/**/*.ts", "vite.config.ts", "vitest.config.ts"],
+    28	  "exclude": ["node_modules", "dist", ".wrangler"]
+    29	}
+Read File
+/home/user/webapp/src/modules/module-05-opportunity/infrastructure/http/opportunity-routes.ts
+Lihat
+    70	export const opportunityRoutes = new Hono<AppEnv>()
+    71	
+    72	/**
+...
+   166	      authenticatedIdentity: resolved.authenticatedIdentity,
+   167	      accountId: resolved.account.id,
+   168	      workspaceId: resolved.workspace.id,
+   169	    })
+Read File
+/home/user/webapp/src/modules/module-05-opportunity/infrastructure/persistence/postgres-opportunity-repository.ts
+Lihat
+     1	import { AppError } from '../../../../shared/errors/app-error.js'
+     2	import { evaluateRequestSchema } from '../../application/schemas.js'
+     3	import { opportunityModelVersions } from '../../application/opportunity-lifecycle.js'
+...
+    77	      `SELECT ${SELECT_COLUMNS} FROM module_05.opportunities
+    78	       WHERE workspace_id = $1 ORDER BY created_at DESC, id DESC LIMIT $2`,
+    79	      [workspaceId, limit],
+    80	    )
+Write File
+/home/user/webapp/src/modules/module-04-demand/domain/demand.ts
+Lihat
+export const DEMAND_SIGNAL_TYPES = [
+  'problem',
+  'search',
+...
+  if (score >= 40) return 'VALIDATING'
+  if (score >= 20) return 'OBSERVING'
+  return 'DISCOVERED'
+}
+Write File
+/home/user/webapp/src/modules/module-04-demand/application/ports.ts
+Lihat
+import type { DemandSignal } from '../domain/demand.js'
+
+export interface DemandSignalRepository {
+...
+  now(): Date
+}
+
+export const systemDemandClock: DemandClock = { now: () => new Date() }
+Write File
+/home/user/webapp/src/modules/module-04-demand/application/demand-service.ts
+Lihat
+import { z } from 'zod'
+import { AppError } from '../../../shared/errors/app-error.js'
+import {
+...
+    && error !== null
+    && 'code' in error
+    && (error as { code?: string }).code === '23505'
+}
+Write File
+/home/user/webapp/src/modules/module-04-demand/infrastructure/persistence/postgres-demand-repository.ts
+Lihat
+import { AppError } from '../../../../shared/errors/app-error.js'
+import type { DemandSignalRepository } from '../../application/ports.js'
+import {
+...
+  const date = value instanceof Date ? value : new Date(value)
+  if (Number.isNaN(date.getTime())) throw AppError.internal('Stored demand signal data is invalid')
+  return date.toISOString()
+}
+Write File
+/home/user/webapp/src/modules/module-04-demand/infrastructure/http/demand-routes.ts
+Lihat
+import { Hono, type Context } from 'hono'
+import { AppError } from '../../../../shared/errors/app-error.js'
+import { successEnvelope } from '../../../../shared/http/envelope.js'
+...
+  return c.json(
+    successEnvelope({ signal }, { requestId: ctx.requestId, correlationId: ctx.correlationId }),
+  )
+})
+Write File
+/home/user/webapp/src/modules/module-04-demand/index.ts
+Lihat
+/** Public contract for Demand Discovery Engine (Task 09). */
+export const MODULE_ID = 'module-04-demand' as const
+export const MODULE_TITLE = 'Demand Discovery Engine' as const
+...
+  mapDemandSignalRow,
+  type DemandPostgresQueryExecutor,
+} from './infrastructure/persistence/postgres-demand-repository.js'
+export { createPostgresDemandSignalRepository } from './infrastructure/persistence/postgres-client.js'
+Write File
+/home/user/webapp/tests/unit/demand-discovery.test.ts
+Lihat
+import { describe, expect, it, vi } from 'vitest'
+import {
+  DEMAND_CONFIDENCE,
+...
+    const repository = new PostgresDemandSignalRepository(db)
+    await expect(repository.findById(WORKSPACE, ID)).rejects.toMatchObject({ code: 'INTERNAL_ERROR' })
+  })
+})
+Edit File
+/home/user/webapp/tests/unit/demand-discovery.test.ts
+Lihat
+--- a//home/user/webapp/tests/unit/demand-discovery.test.ts+++ b//home/user/webapp/tests/unit/demand-discovery.test.ts@@ -219,7 +219,9 @@       })),
+     } as unknown as DemandPostgresQueryExecutor
+     const repository = new PostgresDemandSignalRepository(db)
+-    await repository.create(({ id: _id, ...signal }) => signal)(storedSignal())
++    const { id, ...createInput } = storedSignal()
++    expect(id).toBe(ID)
++    await repository.create(createInput)
+     await repository.findById(WORKSPACE, ID)
+     await repository.list(WORKSPACE, 20)
+     expect(db.query).toHaveBeenNthCalledWith(2, expect.stringMatching(/workspace_id = \$1 AND id = \$2/), [WORKSPACE, ID])
+Write File
+/home/user/webapp/tests/integration/demand-discovery-api.test.ts
+Lihat
+import { describe, expect, it } from 'vitest'
+import { createApp } from '../../src/app/create-app.js'
+import { AppError } from '../../src/shared/errors/app-error.js'
+...
+      expect(JSON.stringify(await response.json())).not.toMatch(/postgres|stack|node_modules|permission/i)
+    }
+  })
+})
+Bash Command
+cd /home/user/webapp && npm run typecheck && npx vitest run tests/unit/demand-discovery.test.ts tests/integration/demand-discovery-api.test.ts tests/unit/authorization.test.ts
+Lihat
+
+> affiliate-os@0.1.0 typecheck
+> tsc --noEmit
+
+tests/unit/demand-discovery.test.ts(233,7): error TS1434: Unexpected keyword or identifier.
+Exit Code: 2
+Read File
+/home/user/webapp/tests/unit/demand-discovery.test.ts
+Lihat
+   220	    } as unknown as DemandPostgresQueryExecutor
+   221	    const repository = new PostgresDemandSignalRepository(db)
+   222	    const { id, ...createInput } = storedSignal()
+...
+   234	    const repository = new PostgresDemandSignalRepository(db)
+   235	    await expect(repository.findById(WORKSPACE, ID)).rejects.toMatchObject({ code: 'INTERNAL_ERROR' })
+   236	  })
+   237	})
+Edit File
+/home/user/webapp/tests/unit/demand-discovery.test.ts
+Lihat
+--- a//home/user/webapp/tests/unit/demand-discovery.test.ts+++ b//home/user/webapp/tests/unit/demand-discovery.test.ts@@ -229,8 +229,11 @@   })
+ 
+   it('rejects malformed stored enum data safely', async () => {
+-    const db = { query: async () => ({ rows: [row(storedSignal({ status: 'INVALID' as DemandSignal['status'] }))] }) }
+-      as unknown as DemandPostgresQueryExecutor
++    const db = ({
++      query: async () => ({
++        rows: [row(storedSignal({ status: 'INVALID' as DemandSignal['status'] }))],
++      }),
++    }) as unknown as DemandPostgresQueryExecutor
+     const repository = new PostgresDemandSignalRepository(db)
+     await expect(repository.findById(WORKSPACE, ID)).rejects.toMatchObject({ code: 'INTERNAL_ERROR' })
+   })
+Bash Command
+cd /home/user/webapp && npm run typecheck && npx vitest run tests/unit/demand-discovery.test.ts tests/integration/demand-discovery-api.test.ts tests/unit/authorization.test.ts
+Lihat
+
+> affiliate-os@0.1.0 typecheck
+> tsc --noEmit
+...
+      Tests  1 failed | 35 passed (36)
+   Start at  14:45:40
+   Duration  2.43s (transform 678ms, setup 0ms, collect 1.16s, tests 170ms, environment 1ms, prepare 308ms)
+
+Exit Code: 1
+Edit File
+/home/user/webapp/tests/unit/authorization.test.ts
+Lihat
+--- a//home/user/webapp/tests/unit/authorization.test.ts+++ b//home/user/webapp/tests/unit/authorization.test.ts@@ -71,7 +71,14 @@   it('keeps the role-permission matrix minimal and deterministic', () => {
+     expect(permissionsForRole('owner')).toContain('workspace.manage')
+     expect(permissionsForRole('admin')).not.toContain('workspace.manage')
+-    expect(permissionsForRole('member')).toEqual(['workspace.read', 'opportunity.read', 'opportunity.create', 'opportunity.update'])
++    expect(permissionsForRole('member')).toEqual([
++      'workspace.read',
++      'opportunity.read',
++      'opportunity.create',
++      'opportunity.update',
++      'demand.read',
++      'demand.create',
++    ])
+   })
+ 
+   it('denies missing permissions, unknown permissions, and unknown roles', () => {
+Write File
+/home/user/webapp/src/modules/module-04-demand/MODULE.md
+Lihat
+# module-04-demand
+
+**Title:** Demand Discovery Engine  
+...
+
+## Deferred
+
+Provider connectors, TikTok/TikTok Shop APIs, Serper/SerpApi, scraping/crawling, LLM discovery, AI-only inference, autom...
+Multi Edit
+/home/user/webapp/README.md
+Lihat
+--- a//home/user/webapp/README.md+++ b//home/user/webapp/README.md@@ -4,7 +4,7 @@ performance optimization, revenue intelligence, automation, billing, and
+ ecosystem commerce.
+ 
+-> **Current state: FOUNDATION + PERSISTENT MODULE 05 MVP + TASK 08 OPPORTUNITY WORKFLOW FOUNDATION.**
++> **Current state: FOUNDATION + TASK 09 DEMAND DISCOVERY FOUNDATION + PERSISTENT MODULE 05 MVP.**
+ > Tasks 01–03 established the foundation and deterministic Opportunity Engine.
+ > TASK 04 adds its minimum PostgreSQL persistence lifecycle: evaluate, persist,
+ > retrieve, and list workspace-owned opportunities. TASK 05 activates and verifies
+@@ -16,6 +16,8 @@ > on the persisted opportunity lifecycle while retaining repository-level tenant filtering.
+ > TASK 08 adds the deterministic `draft → active → completed` workflow, archival transitions,
+ > atomic tenant-scoped state updates, and the authorized lifecycle API.
++> TASK 09 establishes the upstream, evidence-first Demand Discovery foundation with deterministic
++> normalization/scoring, tenant-scoped persistence, duplicate protection, and authorized APIs.
+ 
+ ---
+ 
+@@ -107,6 +109,18 @@ - [x] Focused valid/invalid transition, authorization, tenant-isolation, concurrency-conflict, and API tests
+ - [ ] Workflow history/audit events and arbitrary/custom states remain intentionally deferred
+ 
++## Completed — TASK 09 (demand discovery foundation)
++
++- [x] Evidence-first Module 04 demand-signal domain with controlled signal/source/confidence/status vocabularies
++- [x] Conservative Unicode normalization and transparent deterministic demand scoring
++- [x] Tenant-scoped SHA-256 fingerprinting with authoritative PostgreSQL uniqueness
++- [x] Workspace-scoped create/get/bounded-list application and repository operations
++- [x] `POST`/`GET /api/v1/demand/signals` and `GET /api/v1/demand/signals/:id`
++- [x] Module 15 identity/tenancy and Module 16 `demand.read` / `demand.create` authorization reuse
++- [x] Forward-only migration `0006` with constraints and targeted workspace indexes
++- [x] Domain, validation, duplicate, persistence, authorization, API, and tenant-isolation tests
++- [ ] Provider connectors, automated discovery, AI-only inference, and automatic Opportunity creation remain deferred
++
+ ## Completed — TASK 01/02 (foundation)
+ 
+ - [x] Project foundation (`package.json`, TypeScript strict config, Vite, Wrangler)
+@@ -128,7 +142,6 @@ Deliberately deferred; each belongs to its own task. TASK 03 stayed inside the
+ smallest viable vertical and did not expand scope:
+ 
+-- [ ] Demand discovery (Module 04) — signals are request input for now
+ - [ ] Creator fit, content, distribution, performance, revenue engines
+ - [ ] Advanced/custom authorization policies beyond the Task 07 minimal RBAC matrix
+ - [ ] Full database schema — DOC 21 §180+ table DDL
+@@ -154,6 +167,9 @@ | `GET`  | `/api/v1/affiliate/opportunities?limit=N`       | List workspace opportunities; default 20, maximum 100.                 | bearer JWT |
+ | `GET`  | `/api/v1/affiliate/opportunities/:candidateRef` | Retrieve one workspace opportunity by stable candidate reference.      | bearer JWT |
+ | `PATCH`| `/api/v1/affiliate/opportunities/:id`           | Transition lifecycle with `{ "status": "active" }`; returns `200`.    | Clerk bearer JWT + `opportunity.update` |
++| `POST` | `/api/v1/demand/signals`                        | Normalize, score, fingerprint, and persist one evidence-backed signal. | Clerk bearer JWT + `demand.create` |
++| `GET`  | `/api/v1/demand/signals?limit=N`                | List workspace demand signals; default 20, maximum 100.                 | Clerk bearer JWT + `demand.read` |
++| `GET`  | `/api/v1/demand/signals/:id`                    | Retrieve one workspace-owned demand signal by UUID.                     | Clerk bearer JWT + `demand.read` |
+ | `GET`  | `/api/v1/identity/context`                    | Resolve/provision current identity, account, workspace, and membership. | Clerk bearer JWT |
+ | `GET`  | `/api/v1/identity/account/me`                 | Return the current internal account.                                    | Clerk bearer JWT |
+ | `GET`  | `/api/v1/identity/workspace/current`          | Return the current workspace tenant.                                    | Clerk bearer JWT |
+@@ -230,7 +246,7 @@   forbidden as production persistence and are blocked by both configuration
+   validation and an architecture test.
+ - **Schema ownership:** one database, module-owned logical schemas
+-  (`module_05`, `module_14`, `module_15`, `module_16`, `module_17`, `module_19`) — DOC 21 §2.
++  (`module_04`, `module_05`, `module_14`, `module_15`, `module_16`, `module_17`, `module_19`) — DOC 21 §2.
+ - **Migrations:** forward-only, one transaction each, recorded in
+   `public.schema_migrations` with a SHA-256 checksum. Editing an applied
+   migration fails the runner instead of drifting silently.
+@@ -240,7 +256,9 @@   membership roles to `owner` / `admin` / `member`, adds the Module 16 permission catalog,
+   and indexes workspace-role-status lookups. Migration `0005` converts legacy opportunity
+   status markers to the Task 08 lifecycle, adds its CHECK constraint and tenant/status index,
+-  and registers `opportunity.update`.
++  and registers `opportunity.update`. Migration `0006` adds `module_04.demand_signals`, evidence
++  provenance, bounded deterministic score/status fields, per-workspace fingerprint uniqueness,
++  tenant indexes, and the `demand.read` / `demand.create` permission catalog entries.
+ - **Runtime:** the PostgreSQL adapter is wired only when `DATABASE_URL` is present;
+   unavailable configuration fails closed and is never replaced by D1/SQLite.
+ 
+@@ -266,7 +284,8 @@ │   ├── middleware/          # observability, error handling
+ │   └── routes/              # health, api-v1
+ ├── modules/                 # 18 locked modules, each with a public contract
+-│   ├── module-05-opportunity/   # IMPLEMENTED (TASK 03)
++│   ├── module-04-demand/        # IMPLEMENTED (TASK 09)
++│   ├── module-05-opportunity/   # IMPLEMENTED (TASK 03–08)
+ │   │   ├── domain/          # scoring, decision, priority, angles, explanation
+ │   │   ├── application/     # use cases, schemas, ports
+ │   │   ├── infrastructure/  # http adapter
+@@ -349,7 +368,7 @@ | ------------------------------ | -------------------------------------------------- |
+ | Secret hygiene                 | Enforced — gitignore + secret-scanning test        |
+ | Config validation              | Implemented — fails closed on invalid config       |
+-| Input validation (Module 05)   | Implemented — Zod schemas, `422` + field details   |
++| Input validation (Modules 04/05)| Implemented — strict schemas, `422` + field details |
+ | Fail-closed unimplemented data | Implemented — `501`, never a fake empty collection |
+ | Secret redaction in logs       | Implemented — structural, not caller-dependent     |
+ | No stack traces in responses   | Implemented                                        |
+@@ -358,7 +377,7 @@ | Persistent-route authentication| Implemented — HS256, required expiry, UUID tenant claims |
+ | External identity + tenancy    | Implemented — Clerk boundary + Module 15 context   |
+ | Authorization / RBAC boundary  | Implemented — minimal Task 07 Module 16 policy      |
+-| Tenant isolation enforcement   | Implemented — authorization + Module 05 queries     |
++| Tenant isolation enforcement   | Implemented — authorization + Modules 04/05 queries |
+ | Rate limiting                  | **PENDING**                                        |
+ | Audit log persistence          | **PENDING**                                        |
+ 
+@@ -376,4 +395,4 @@ - **Production URL:** https://affiliate-os.pages.dev
+ - **Status:** ✅ Active
+ - **Tech stack:** Hono + TypeScript + Zod + Vitest + Wrangler
+-- **Last updated:** 2026-09-03 (TASK 08 opportunity workflow and lifecycle foundation)
++- **Last updated:** 2026-09-03 (TASK 09 demand discovery foundation)
+Multi Edit
+/home/user/webapp/migrations/README.md
+Lihat
+--- a//home/user/webapp/migrations/README.md+++ b//home/user/webapp/migrations/README.md@@ -53,6 +53,7 @@ | `0003_module_15_identity_tenancy.sql` | Task 06 account, identity, workspace, membership, and ownership constraints | ready |
+ | `0004_module_16_authorization_rbac.sql` | Task 07 role constraint, permission catalog, and authorization lookup index | ready |
+ | `0005_module_05_opportunity_workflow.sql` | Task 08 lifecycle states, update permission, and tenant/status index | ready |
++| `0006_module_04_demand_discovery.sql` | Task 09 tenant-owned demand signals, evidence, fingerprint uniqueness, permissions, and indexes | ready |
+ 
+ Migration `0003` establishes the minimum tenant boundary. Migration `0004` preserves existing
+ owner memberships, expands the allowed role vocabulary to `owner` / `admin` / `member`, and
+@@ -60,3 +61,6 @@ The deterministic role-permission matrix remains application policy in Module 16.
+ Migration `0005` reconciles legacy `EVALUATED` rows to `draft`, constrains the lifecycle
+ vocabulary, adds `opportunity.update`, and indexes tenant-scoped status queries.
++Migration `0006` establishes evidence-first `module_04.demand_signals`, enforces controlled
++vocabularies and bounded values, guarantees per-workspace fingerprint uniqueness, adds targeted
++tenant/status/problem indexes, and registers `demand.read` / `demand.create`.
+Bash Command
+cd /home/user/webapp && npm run typecheck && npm run lint && npx vitest run tests/unit/demand-discovery.test.ts tests/integration/demand-discovery-api.test.ts tests/unit/authorization.test.ts tests/architecture/boundaries.test.ts
+Lihat
+
+> affiliate-os@0.1.0 typecheck
+> tsc --noEmit
+...
+      Tests  50 passed (50)
+   Start at  14:47:08
+   Duration  2.87s (transform 681ms, setup 0ms, collect 1.13s, tests 253ms, environment 2ms, prepare 420ms)
+
+Exit Code: 0
+Berpikir Mendalam
+Total: 6 Tugas
+3 tugas yang harus dilakukan tersisa
+Audit repository, baseline Task 08, architecture, migrations, conventions, and uploaded Task 09 specification
+Implement Module 04 demand domain, persistence, services, authorization, and API integration
+Add comprehensive Task 09 tests and update project documentation
+Run full verification and resolve all failures
+Commit Task 09 and push main to existing GitHub repository
+Configure BYOK Cloudflare, deploy existing project, and verify production
+Bash Command
+cd /home/user/webapp && npm run verify
+Lihat
+🔄 Background Task Started
+Shell ID: bash_170e9108
+Command: cd /home/user/webapp && npm run verify
+Status: running
+Status: running
+Bash Command
+cd /home/user/webapp && git diff --check && git status --short && git diff --stat && git diff -- migrations/0001_extensions_and_schemas.sql migrations/0002_module_05_opportunity_lifecycle.sql migrations/0003_module_15_identity_tenancy.sql migrations/0004_module_16_authorization_rbac.sql migrations/0005_module_05_opportunity_workflow.sql migrations/0006_module_04_demand_discovery.sql && if [ -n "${DATABASE_URL:-}" ]; then npm run db:migrate:status; else echo 'DATABASE MIGRATION STATUS: BLOCKED (DATABASE_URL unavailable in shell)'; fi
+Lihat
+src/modules/module-04-demand/MODULE.md:3: trailing whitespace.
++**Title:** Demand Discovery Engine  
+src/modules/module-04-demand/MODULE.md:4: trailing whitespace.
++**Architecture reference:** AFFILIATE OS — DEMAND DISCOVERY ENGINE v1.0  
+Exit Code: 2
+Search Content
+sk_(test|live)_|napi_|sk-proj-|OPENAI_API_KEY\s*=|CLERK_SECRET_KEY\s*=|DATABASE_URL\s*=postgres
+Lihat
+Edit File
+/home/user/webapp/src/modules/module-04-demand/MODULE.md
+Lihat
+--- a//home/user/webapp/src/modules/module-04-demand/MODULE.md+++ b//home/user/webapp/src/modules/module-04-demand/MODULE.md@@ -1,7 +1,9 @@ # module-04-demand
+ 
+-**Title:** Demand Discovery Engine  
+-**Architecture reference:** AFFILIATE OS — DEMAND DISCOVERY ENGINE v1.0  
++**Title:** Demand Discovery Engine
++
++**Architecture reference:** AFFILIATE OS — DEMAND DISCOVERY ENGINE v1.0
++
+ **Status:** IMPLEMENTED — Task 09 foundation
+ 
+ ## Boundary rules
+Bash Output
+Lihat
+Read File
+/home/user/webapp/tests/integration/opportunity-api.test.ts
+Lihat
+   280	    const serialized = JSON.stringify(await readBody<unknown>(await request(BASE)))
+   281	    expect(serialized).not.toMatch(/postgres(ql)?:\/\//)
+   282	  })
+...
+   309	    })
+   310	    expect(res.headers.get('x-request-id')).toBe('req-opportunity-1')
+   311	  })
+   312	})
+Edit File
+/home/user/webapp/tests/integration/opportunity-api.test.ts
+Lihat
+--- a//home/user/webapp/tests/integration/opportunity-api.test.ts+++ b//home/user/webapp/tests/integration/opportunity-api.test.ts@@ -292,9 +292,11 @@     const body = await readBody<RootData>(await request('/api/v1'))
+     expect(body.data.mounted_routers).toEqual([
+       { path: '/api/v1/affiliate', owner_module: 'module-05-opportunity' },
++      { path: '/api/v1/demand', owner_module: 'module-04-demand' },
+       { path: '/api/v1/identity', owner_module: 'module-15-identity' },
+     ])
+     expect(body.data.pending_routers.map((r) => r.path)).not.toContain('/api/v1/affiliate')
++    expect(body.data.pending_routers.map((r) => r.path)).not.toContain('/api/v1/demand')
+   })
+ 
+   it('an unknown sub-route still returns the canonical RESOURCE_NOT_FOUND', async () => {
+Bash Output
+Lihat
+Bash Command
+cd /home/user/webapp && npm run verify
+Lihat
+🔄 Background Task Started
+Shell ID: bash_adc27b83
+Command: cd /home/user/webapp && npm run verify
+Status: running
+Status: running
+Bash Output
+Lihat
+Bash Output
+Lihat
+Bash Output
+Lihat
+Bash Output
+Lihat
+Bash Command
+cd /home/user/webapp && git diff --check && git status --short && git diff --stat && git diff --name-only && git diff -- migrations/0001_extensions_and_schemas.sql migrations/0002_module_05_opportunity_lifecycle.sql migrations/0003_module_15_identity_tenancy.sql migrations/0004_module_16_authorization_rbac.sql migrations/0005_module_05_opportunity_workflow.sql migrations/0006_module_04_demand_discovery.sql && if [ -n "${DATABASE_URL:-}" ]; then npm run db:migrate:status; else echo 'DATABASE MIGRATION STATUS: BLOCKED (DATABASE_URL unavailable in shell)'; fi
+Lihat
+ M README.md
+ M migrations/README.md
+ M src/modules/module-04-demand/MODULE.md
+...
+tests/integration/opportunity-api.test.ts
+tests/unit/authorization.test.ts
+tests/unit/demand-discovery.test.ts
+DATABASE MIGRATION STATUS: BLOCKED (DATABASE_URL unavailable in shell)
+Exit Code: 0
+Berpikir Mendalam
+Total: 6 Tugas
+2 tugas yang harus dilakukan tersisa
+Audit repository, baseline Task 08, architecture, migrations, conventions, and uploaded Task 09 specification
+Implement Module 04 demand domain, persistence, services, authorization, and API integration
+Add comprehensive Task 09 tests and update project documentation
+Run full verification and resolve all failures
+Commit Task 09 and push main to existing GitHub repository
+Configure BYOK Cloudflare, deploy existing project, and verify production
+Bash Command
+cd /home/user/webapp && git add README.md migrations/README.md src/modules/module-04-demand tests/unit/demand-discovery.test.ts tests/integration/demand-discovery-api.test.ts tests/integration/opportunity-api.test.ts tests/unit/authorization.test.ts && git commit -m "fix(task-09): complete demand discovery foundation" && git push origin main && git status --short --branch && git log -3 --oneline --decorate
+Lihat
+[main 93541ec] fix(task-09): complete demand discovery foundation
+ 13 files changed, 980 insertions(+), 181 deletions(-)
+ create mode 100644 tests/integration/demand-discovery-api.test.ts
+...
+## main...origin/main
+93541ec (HEAD -> main, origin/main, origin/HEAD) fix(task-09): complete demand discovery foundation
+1a3b5e9 test(task-09): add demand discovery foundation coverage
+9919cff fix(task-09): remove runtime require from demand service
+Exit Code: 0
+Berpikir Mendalam
+Total: 6 Tugas
+1 tugas yang harus dilakukan tersisa
+Audit repository, baseline Task 08, architecture, migrations, conventions, and uploaded Task 09 specification
+Implement Module 04 demand domain, persistence, services, authorization, and API integration
+Add comprehensive Task 09 tests and update project documentation
+Run full verification and resolve all failures
+Commit Task 09 and push main to existing GitHub repository
+Configure BYOK Cloudflare, deploy existing project, and verify production
+Setup Cloudflare API Key
+Lihat
+Meta Info
+Lihat
+Meta Info
+Lihat
+Bash Command
+cd /home/user/webapp && npx wrangler whoami
+Lihat
+
+ ⛅️ wrangler 3.114.17 (update available 4.128.0)
+------------------------------------------------
+...
+├───────────────────────────────────────┼──────────────────────────────────┤
+│ Sparkmind.support@gmail.com's Account │ a167a50f1272635d3c1145aab3cd8f98 │
+└───────────────────────────────────────┴──────────────────────────────────┘
+🔓 To see token permissions visit https://dash.cloudflare.com/profile/api-tokens.
+Exit Code: 0
+Bash Command
+cd /home/user/webapp && npx wrangler pages project list
+Lihat
+┌──────────────────────────────┬────────────────────────────────────────────────────────────────────────────────────────...
+│ Project Name                 │ Project Domains                                                                        ...
+├──────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────...
+...
+│ gowes-foundry                │ gowes-foundry.pages.dev, gowes-foundry.sparkmind-obp.biz.id, gowes-foundry.web.id      ...
+├──────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────...
+│ petung-foundry               │ petung-foundry.pages.dev, petung-foundry.sparkmind-obp.biz.id                          ...
+└──────────────────────────────┴────────────────────────────────────────────────────────────────────────────────────────...
+Exit Code: 0
+Bash Command
+cd /home/user/webapp && npx wrangler pages secret list --project-name affiliate-os
+Lihat
+
+ ⛅️ wrangler 3.114.17 (update available 4.128.0)
+------------------------------------------------
+...
+  - CLERK_JWKS_URL: Value Encrypted
+  - DATABASE_SSL: Value Encrypted
+  - DATABASE_URL: Value Encrypted
+  - NODE_ENV: Value Encrypted
+Exit Code: 0
+Read File
+/home/user/webapp/wrangler.jsonc
+Lihat
+     1	{
+     2	  // Affiliate OS — Cloudflare Pages configuration.
+     3	  //
+...
+    11	  "compatibility_date": "2024-12-01",
+    12	  "compatibility_flags": ["nodejs_compat"],
+    13	  "pages_build_output_dir": "./dist"
+    14	}
+Bash Command
+cd /home/user/webapp && python - <<'PY' import json, urllib.request from pathlib import Path key = Path('/home/user/uploaded_files/neon-api.key.q.q.q.q.txt').read_text().strip() if not key: raise SystemExit('Neon API credential file is empty') request = urllib.request.Request('https://console.neon.tech/api/v2/projects?limit=100', headers={'Authorization': f'Bearer {key}', 'Accept': 'application/json'}) with urllib.request.urlopen(request, timeout=30) as response: data = json.load(response) for project in data.get('projects', []): print(json.dumps({'id': project.get('id'), 'name': project.get('name'), 'region_id': project.get('region_id')})) PY
+Lihat
+{"id": "delicate-cherry-76710038", "name": "affiliate-os", "region_id": "aws-ap-southeast-1"}
+{"id": "broad-poetry-98667406", "name": "Hydarr", "region_id": "aws-ap-southeast-1"}
+Exit Code: 0
+Bash Command
+cd /home/user/webapp && python - <<'PY' import json, urllib.parse, urllib.request from pathlib import Path key = Path('/home/user/uploaded_files/neon-api.key.q.q.q.q.txt').read_text().strip() project_id = 'delicate-cherry-76710038' headers = {'Authorization': f'Bearer {key}', 'Accept': 'application/json'} def get(path): req = urllib.request.Request('https://console.neon.tech/api/v2' + path, headers=headers) with urllib.request.urlopen(req, timeout=30) as response: return json.load(response) branches = get(f'/projects/{project_id}/branches').get('branches', []) for branch in branches: branch_id = branch['id'] databases = get(f'/projects/{project_id}/branches/{branch_id}/databases').get('databases', []) roles = get(f'/projects/{project_id}/branches/{branch_id}/roles').get('roles', []) print(json.dumps({ 'branch_id': branch_id, 'branch_name': branch.get('name'), 'default': branch.get('default', False), 'databases': [database.get('name') for database in databases], 'roles': [role.get('name') for role in roles], })) PY
+Lihat
+{"branch_id": "br-flat-art-b3vfej6v", "branch_name": "main", "default": true, "databases": ["neondb"], "roles": ["neondb...
+Exit Code: 0
+Bash Command
+cd /home/user/webapp && umask 077 && python - <<'PY' import json, urllib.parse, urllib.request from pathlib import Path key = Path('/home/user/uploaded_files/neon-api.key.q.q.q.q.txt').read_text().strip() params = urllib.parse.urlencode({ 'branch_id': 'br-flat-art-b3vfej6v', 'database_name': 'neondb', 'role_name': 'neondb_owner', 'pooled': 'true', }) request = urllib.request.Request( 'https://console.neon.tech/api/v2/projects/delicate-cherry-76710038/connection_uri?' + params, headers={'Authorization': f'Bearer {key}', 'Accept': 'application/json'}, ) with urllib.request.urlopen(request, timeout=30) as response: data = json.load(response) uri = data.get('uri') if not isinstance(uri, str) or not uri.startswith('postgres'): raise SystemExit('Neon API did not return a PostgreSQL connection URI') Path('/tmp/affiliate-os-database-url').write_text(uri) print('Production database connection material recovered securely.') PY chmod 600 /tmp/affiliate-os-database-url export DATABASE_URL="$(cat /tmp/affiliate-os-database-url)" export DATABASE_SSL=true npm run db:migrate:status npm run db:migrate npm run db:migrate:status rm -f /tmp/affiliate-os-database-url
+Lihat
+Production database connection material recovered securely.
+
+> affiliate-os@0.1.0 db:migrate:status
+...
+0005     APPLIED   0005_module_05_opportunity_workflow.sql
+0006     PENDING   0006_module_04_demand_discovery.sql
+
+total=6 pending=1
+Exit Code: 0
+Edit File
+/home/user/webapp/migrations/0006_module_04_demand_discovery.sql
+Lihat
+--- a//home/user/webapp/migrations/0006_module_04_demand_discovery.sql+++ b//home/user/webapp/migrations/0006_module_04_demand_discovery.sql@@ -1,5 +1,7 @@ -- TASK 09: Demand Discovery foundation.
+ -- Manual / semi-automated evidence ingestion only; provider connectors remain deferred.
++
++CREATE SCHEMA IF NOT EXISTS module_04;
+ 
+ CREATE TABLE module_04.demand_signals (
+   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+Bash Command
+cd /home/user/webapp && npm run verify
+Lihat
+🔄 Background Task Started
+Shell ID: bash_9056c203
+Command: cd /home/user/webapp && npm run verify
+Status: running
+Status: running
+Bash Command
+cd /home/user/webapp && umask 077 && python - <<'PY' import json, urllib.parse, urllib.request from pathlib import Path key = Path('/home/user/uploaded_files/neon-api.key.q.q.q.q.txt').read_text().strip() params = urllib.parse.urlencode({'branch_id':'br-flat-art-b3vfej6v','database_name':'neondb','role_name':'neondb_owner','pooled':'true'}) request = urllib.request.Request('https://console.neon.tech/api/v2/projects/delicate-cherry-76710038/connection_uri?' + params, headers={'Authorization': f'Bearer {key}', 'Accept':'application/json'}) with urllib.request.urlopen(request, timeout=30) as response: uri = json.load(response).get('uri') if not isinstance(uri, str) or not uri.startswith('postgres'): raise SystemExit('Neon API did not return a PostgreSQL connection URI') Path('/tmp/affiliate-os-database-url').write_text(uri) PY chmod 600 /tmp/affiliate-os-database-url export DATABASE_URL="$(cat /tmp/affiliate-os-database-url)" DATABASE_SSL=true npm run db:migrate npm run db:migrate:status rm -f /tmp/affiliate-os-database-url
+Lihat
+
+> affiliate-os@0.1.0 db:migrate
+> node scripts/migrate.mjs up
+...
+0005     APPLIED   0005_module_05_opportunity_workflow.sql
+0006     APPLIED   0006_module_04_demand_discovery.sql
+
+total=6 pending=0
+Exit Code: 0
+Bash Output
+Lihat
+Bash Output
+Lihat
+Bash Output
+Lihat
+Bash Command
+cd /home/user/webapp && git diff --check && git status --short && git diff -- migrations/0006_module_04_demand_discovery.sql && git add migrations/0006_module_04_demand_discovery.sql && git commit -m "fix(task-09): create demand schema in migration" && git push origin main && git status --short --branch && git rev-parse HEAD
+Exit Code: unknown
+Saldo kredit Anda negatif. Run ini telah dihentikan. Silakan isi ulang untuk melanjutkan. upgrade
+
+Pratinjau / Penjelajah File / Pengaturan / Publikasi / Tutorial
+
+
+GPT-5.6 Sol"
+ https://www.genspark.ai/agents?id=5c9e1573-a7f4-4107-9b40-a255dd37a415#:~:text=Code,GPT%2D5.6%20Sol
