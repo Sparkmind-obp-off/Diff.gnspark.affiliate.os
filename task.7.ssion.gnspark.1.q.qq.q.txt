@@ -1,0 +1,2124 @@
+"Code
+api.task.5.y.dff.gnspark.q.w.www.www.txt
+69.27 KB
+dfff gnsparkk.hrdeninggg.q.qq.q1.txt
+82.83 KB
+dfff.gnspark.pshh.gthubb.q.q,w.q.txt
+91.86 KB
+dff.gnspark.task.5.q..1q.txt
+47.98 KB
+serper.dev.q.qq1q.txt
+40 B
+clerk.credentiall.q.q..1q.txt
+1.08 KB
+neon-api.key.q.q.q.q.txt
+69 B
+open.ai.pltfrm.api.key.q.q,.txt
+164 B
+Baikk gss dkd gysss dj3 s gss dke gysssd ke s..(.MASTER SYSTEM PROMPT — AFFILIATE OS
+TASK 07 — AUTHORIZATION, RBAC & TENANT ACCESS CONTROL
+VERSION 1.0 — EXECUTION MASTER
+0. EXECUTION MODE
+
+You are executing TASK 07 for the existing Affiliate OS repository.
+
+SOURCE OF TRUTH
+
+Repository:
+
+Sparkmind-obp-off/Affiliate.os
+
+Branch:
+
+main
+
+ABSOLUTE RULE
+
+Work ONLY against the existing Affiliate.os repository.
+
+Do NOT create a new repository.
+
+Do NOT use the Diff.gnspark... repository as source code.
+
+Do NOT rebuild Task 03, Task 04, Task 05, or Task 06 from scratch.
+
+Do NOT replace the existing architecture with a new framework or parallel architecture.
+
+Extend the existing implementation.
+
+1. TASK OBJECTIVE
+
+TASK 07 establishes the Authorization / RBAC / Tenant Access Control foundation for Affiliate OS.
+
+Task 06 established:
+
+External Identity → Internal Account → Workspace/Tenant
+
+Task 07 establishes:
+
+Authenticated Identity
+→ Account
+→ Workspace
+→ Membership
+→ Role
+→ Permission
+→ Authorization Decision
+→ Resource Access
+
+The system must be able to determine:
+
+Who is authenticated.
+Which internal account they belong to.
+Which workspace/tenant they are operating in.
+What role they have inside that workspace.
+What permissions that role grants.
+Whether the requested action is authorized.
+Whether the target resource belongs to the active tenant/workspace.
+Whether access must be denied.
+
+Authorization MUST fail closed.
+
+2. EXISTING ARCHITECTURE THAT MUST BE PRESERVED
+
+Before implementation, inspect the existing repository.
+
+Preserve:
+
+Task 03 regression baseline.
+Task 04 baseline.
+Task 05 PostgreSQL persistence.
+Task 05 authentication boundary.
+Task 06 Identity / Account / Workspace / Membership foundation.
+Clerk as external authentication provider.
+Affiliate OS ownership of authorization.
+Existing request/correlation/idempotency context.
+Existing repository/service architecture.
+Existing migration runner.
+Existing error model.
+Existing runtime compatibility.
+Existing Cloudflare/workerd compatibility.
+Existing Module 05 persistence.
+Existing Module 15 identity/tenancy implementation.
+
+Do NOT introduce Clerk-specific authorization logic throughout the domain.
+
+Clerk authenticates the external identity.
+
+Affiliate OS owns:
+
+account
+workspace
+membership
+role
+permission
+authorization
+tenant isolation
+3. MODULE BOUNDARY
+
+TASK 07 primarily implements:
+
+Module 16 — Authorization / RBAC
+
+Module 15 remains responsible for:
+
+Identity
+Account
+Workspace
+Membership
+Tenant context
+
+Module 16 becomes responsible for:
+
+Role definition
+Permission definition
+Role-permission mapping
+Authorization evaluation
+Tenant-aware access decisions
+Authorization middleware/policy boundary
+Authorization errors
+Authorization tests
+
+Do NOT expand into unrelated modules.
+
+4. RBAC MODEL
+
+Design the authorization model against the existing database conventions.
+
+At minimum establish:
+
+Role
+
+A role represents an authorization profile inside a workspace.
+
+Initial roles must remain intentionally minimal.
+
+At minimum support:
+
+owner
+admin
+member
+
+Do NOT implement an unnecessarily large enterprise RBAC matrix.
+
+Permission
+
+Permissions represent atomic actions.
+
+Use a stable naming convention such as:
+
+resource.action
+
+Examples:
+
+workspace.read
+workspace.manage
+member.read
+member.manage
+opportunity.read
+opportunity.create
+opportunity.update
+opportunity.delete
+
+Only introduce permissions that are actually required by the existing application architecture.
+
+Do NOT create speculative permissions for future modules.
+
+5. ROLE-PERMISSION POLICY
+
+Define the initial policy explicitly.
+
+Owner:
+
+full workspace administration
+membership management
+resource access
+
+Admin:
+
+workspace operational management
+membership/resource permissions according to the implemented policy
+
+Member:
+
+normal operational access
+no workspace ownership/administration privileges
+
+The exact permission matrix MUST be represented as deterministic application policy and/or database-backed configuration consistent with the repository architecture.
+
+Do not scatter role checks throughout route handlers.
+
+6. AUTHORIZATION DECISION MODEL
+
+Authorization should produce a deterministic decision.
+
+Conceptually:
+
+authorize({
+  accountId,
+  workspaceId,
+  permission,
+  resource?
+})
+
+Result:
+
+ALLOW
+
+or:
+
+DENY
+
+The authorization layer must verify:
+
+authenticated identity exists
+account exists
+account is active
+workspace exists
+workspace is active
+membership exists
+membership is active
+role is valid
+role grants requested permission
+resource belongs to the same workspace when a resource is involved
+
+Any failed condition MUST result in denial.
+
+7. TENANT ISOLATION
+
+Tenant isolation is mandatory.
+
+A user from Workspace A MUST NOT access Workspace B resources merely because:
+
+they know the resource ID
+they know another workspace ID
+they manipulate request parameters
+they possess a valid authenticated account
+they possess a valid role in another workspace
+
+Authorization must never rely solely on:
+
+accountId
+
+when the resource is tenant-scoped.
+
+Tenant-scoped resources must be evaluated using:
+
+workspaceId
+
+plus the authenticated account/membership context.
+
+8. RESOURCE AUTHORIZATION
+
+Where applicable, resource repositories/services must receive tenant context explicitly.
+
+Example:
+
+getOpportunity(workspaceId, opportunityId)
+
+NOT:
+
+getOpportunity(opportunityId)
+
+when the opportunity is tenant-owned.
+
+Authorization must happen before sensitive mutation.
+
+Repository-level tenant filtering must remain in place as defense in depth.
+
+Do not rely on UI filtering for security.
+
+9. REQUEST CONTEXT
+
+Extend the existing request context only when necessary.
+
+Preserve:
+
+requestId
+correlationId
+idempotencyKey
+authenticatedIdentity
+accountId
+workspaceId
+
+Authorization information may be derived from the existing identity/tenancy context.
+
+Do NOT duplicate identity state into multiple incompatible request-context structures.
+
+10. AUTHORIZATION BOUNDARY
+
+Create a clean authorization boundary.
+
+Routes should conceptually follow:
+
+HTTP Request
+    ↓
+Authentication
+    ↓
+Identity Resolution
+    ↓
+Account / Workspace Context
+    ↓
+Authorization
+    ↓
+Application Service
+    ↓
+Repository
+    ↓
+Database
+
+Do NOT put SQL inside authorization middleware.
+
+Do NOT put role matrices directly inside route handlers.
+
+Do NOT make every route independently interpret Clerk claims.
+
+11. ERROR HANDLING
+
+Unauthorized access MUST fail closed.
+
+Use the existing application error conventions.
+
+Recommended semantics:
+
+unauthenticated → authentication failure
+authenticated but unauthorized → authorization failure
+invalid tenant/resource relationship → authorization failure or not-found according to existing security convention
+
+Never expose:
+
+SQL
+database schema
+Clerk internals
+JWT internals
+secrets
+stack traces
+authorization implementation details
+
+to clients.
+
+Avoid leaking whether another tenant's resource exists.
+
+12. DATABASE
+
+Inspect the current migration chain first.
+
+Do NOT modify already-applied migrations unless absolutely unavoidable.
+
+Create the next forward-only migration.
+
+The migration must follow existing conventions.
+
+Potential structures may include:
+
+role definitions
+permission definitions
+role-permission mapping
+
+But do not create redundant tables if the existing membership/role model can safely support the required authorization model.
+
+All database constraints must be explicit.
+
+Use:
+
+primary keys
+foreign keys
+unique constraints
+indexes
+appropriate status constraints
+
+Avoid speculative schema.
+
+13. ROLE ASSIGNMENT
+
+The existing Task 06 membership currently has the initial owner role model.
+
+Task 07 may extend membership roles to support the RBAC model.
+
+Migration must preserve all existing valid Task 06 data.
+
+Existing owner memberships must remain valid.
+
+Do NOT break first-login provisioning.
+
+Do NOT break existing workspace ownership.
+
+Do NOT silently convert existing accounts to invalid roles.
+
+14. AUTHORIZATION SERVICE
+
+Implement a reusable authorization service/policy boundary.
+
+The service should answer questions such as:
+
+Can this account perform this permission in this workspace?
+
+and, where applicable:
+
+Can this account perform this permission against this resource?
+
+The implementation must be deterministic and testable without requiring HTTP.
+
+15. API INTEGRATION
+
+Inspect the existing route architecture.
+
+Only expose authorization/context endpoints where they provide real application value.
+
+Do NOT create a large API surface just for Task 07.
+
+Potentially useful endpoint:
+
+GET /api/v1/identity/context
+
+may expose safe current authorization context if the existing contract supports it.
+
+Do NOT expose internal permission tables unnecessarily.
+
+Do NOT expose authorization implementation details.
+
+16. SECURITY REQUIREMENTS
+
+Verify all of the following:
+
+Authentication
+unauthenticated requests remain blocked
+Clerk verification remains behind the authentication boundary
+legacy Task 05 authentication behavior is not accidentally broken
+Authorization
+invalid role → deny
+inactive membership → deny
+suspended account → deny
+suspended workspace → deny
+missing membership → deny
+missing permission → deny
+Tenant isolation
+Workspace A cannot access Workspace B resources
+cross-tenant mutation is denied
+cross-tenant reads are denied
+manipulated workspace IDs do not bypass authorization
+manipulated resource IDs do not bypass tenant boundaries
+Privilege escalation
+
+Verify:
+
+member cannot act as admin
+admin cannot act as owner-only functionality
+membership role cannot be arbitrarily supplied by client
+role cannot be trusted from unverified request payload
+permission cannot be supplied by the client as an authorization override
+17. TESTING REQUIREMENTS
+
+Add focused tests for:
+
+Identity → Authorization
+
+Authenticated identity resolves to account/workspace/membership correctly.
+
+Role resolution
+
+Owner resolves correctly.
+
+Admin resolves correctly.
+
+Member resolves correctly.
+
+Permission resolution
+
+Allowed permission → ALLOW.
+
+Missing permission → DENY.
+
+Unknown permission → DENY.
+
+Unknown role → DENY.
+
+Account state
+
+Active account → allowed according to role.
+
+Suspended account → denied.
+
+Workspace state
+
+Active workspace → normal authorization.
+
+Suspended workspace → denied.
+
+Membership state
+
+Active membership → evaluated.
+
+Suspended/inactive membership → denied.
+
+Missing membership → denied.
+
+Tenant isolation
+
+Workspace A user accessing Workspace B resource → denied.
+
+Workspace A user modifying Workspace B resource → denied.
+
+Privilege escalation
+
+Member attempting admin operation → denied.
+
+Admin attempting owner-only operation → denied.
+
+Client-supplied role manipulation → ignored/denied.
+
+Regression
+
+Task 03 baseline remains intact.
+
+Task 05 persistence remains intact.
+
+Task 06 identity/account/workspace provisioning remains intact.
+
+18. CONCURRENCY
+
+If role/membership provisioning or authorization-related writes introduce concurrency risks, use database constraints and transactions.
+
+Do not rely only on application-level checks.
+
+If practical, add a real PostgreSQL concurrency test.
+
+Do not claim PostgreSQL concurrency coverage if the test only uses an in-memory fake.
+
+19. MIGRATION VERIFICATION
+
+After implementation:
+
+Inspect migration status.
+Apply pending migration against the configured development/test database where available.
+Verify schema.
+Verify constraints.
+Verify indexes.
+Verify existing Task 06 records remain valid.
+Run regression tests.
+
+If production database access is unavailable, report that explicitly.
+
+Never claim production migration success without evidence.
+
+20. CODE QUALITY
+
+Maintain:
+
+TypeScript strictness
+existing lint rules
+existing build system
+existing test framework
+existing module boundaries
+existing dependency strategy
+
+Avoid unnecessary dependencies.
+
+Avoid framework replacement.
+
+Avoid unrelated refactors.
+
+Avoid frontend redesign.
+
+Avoid billing implementation.
+
+Avoid TikTok integration.
+
+Avoid LLM/search implementation.
+
+Avoid analytics implementation.
+
+Avoid Module 17 connector implementation.
+
+Avoid Module 18+ scope.
+
+21. SECURITY REVIEW
+
+Inspect:
+
+.gitignore
+.env.example
+authentication boundary
+authorization boundary
+request context
+repositories
+services
+migrations
+logs
+error responses
+tests
+fixtures
+
+Confirm no secrets are introduced.
+
+Do not copy credential contents into source files or documentation.
+
+Do not print secrets during verification.
+
+22. ACCIDENTAL FILES
+
+Previously identified accidental artifacts remain a security/repository hygiene concern:
+
+Dff.gnspark
+dfff.gnspark.pshh.gthubb.q.q,w.q.txt
+
+Inspect their current status.
+
+If they are still clearly accidental and safe to remove from the current tree, remove them through the normal repository workflow.
+
+Do NOT rewrite Git history automatically.
+
+Historical exposure must be reported separately.
+
+Do NOT copy their contents into Task 07 documentation.
+
+23. REQUIRED VERIFICATION COMMANDS
+
+Run the repository's existing verification flow.
+
+At minimum:
+
+npm run typecheck
+npm run lint
+npm test
+npm run build
+
+Also run:
+
+npm run verify
+
+and the relevant migration/status checks where the environment permits.
+
+Do not claim a command passed unless it was actually executed.
+
+24. REGRESSION REQUIREMENT
+
+The known Task 03 regression baseline remains mandatory:
+
+84 / STRONG / TEST_NOW / R12_TEST_NOW
+
+Task 07 MUST NOT regress this baseline.
+
+Task 05 persistence and Task 06 identity/tenancy functionality must remain intact.
+
+25. IMPLEMENTATION WORKFLOW
+
+Follow this exact sequence:
+
+AUDIT
+↓
+DESIGN AGAINST EXISTING ARCHITECTURE
+↓
+IMPLEMENT
+↓
+MIGRATE
+↓
+TEST
+↓
+SECURITY REVIEW
+↓
+REGRESSION TEST
+↓
+COMMIT
+↓
+VERIFY COMMIT
+↓
+REPORT
+↓
+STOP
+
+Do not skip audit.
+
+Do not implement before understanding the current Task 06 architecture.
+
+Do not perform unrelated cleanup.
+
+26. COMMIT
+
+Preferred commit message:
+
+feat(task-07): establish authorization and rbac foundation
+
+Commit only the actual Task 07 changes.
+
+Verify the resulting commit SHA.
+
+Verify main points to the new commit.
+
+27. FINAL REPORT
+
+Final response must contain:
+
+STATUS
+
+One of:
+
+PASS
+PARTIAL
+BLOCKED
+PREVIOUS HEAD
+
+Exact SHA.
+
+FINAL HEAD
+
+Exact SHA if committed.
+
+IMPLEMENTED
+
+Concise list of actual changes.
+
+DATABASE
+
+Migration created/applied status.
+
+AUTHORIZATION
+
+Role/permission implementation status.
+
+TENANT ISOLATION
+
+Tests and results.
+
+SECURITY
+
+Security findings.
+
+REGRESSION
+
+Task 03 / Task 05 / Task 06 regression status.
+
+VERIFICATION
+
+Actual typecheck/lint/test/build results.
+
+GIT
+
+Commit SHA and branch status.
+
+FINDINGS
+
+Any warnings or technical debt.
+
+DEFERRED
+
+Anything intentionally outside Task 07.
+
+28. HARD STOP
+
+When TASK 07 is complete:
+
+STOP.
+
+Do not automatically start TASK 08.
+
+Do not redesign the system.
+
+Do not refactor unrelated modules.
+
+Do not continue into billing, connectors, TikTok, AI, analytics, frontend redesign, or other future scope.
+
+Wait for the next explicit task instruction.
+
+29. FINAL PRINCIPLE
+
+Affiliate OS must evolve as one coherent system.
+
+The architectural chain after TASK 07 should be:
+
+External Identity
+      ↓
+Internal Identity
+      ↓
+Account
+      ↓
+Workspace / Tenant
+      ↓
+Membership
+      ↓
+Role
+      ↓
+Permission
+      ↓
+Authorization Decision
+      ↓
+Application Service
+      ↓
+Tenant-Scoped Repository
+      ↓
+PostgreSQL
+
+Security principle:
+
+AUTHENTICATED ≠ AUTHORIZED
+
+Tenant principle:
+
+VALID ACCOUNT ≠ VALID ACCESS TO EVERY TENANT
+
+Authorization principle:
+
+DENY BY DEFAULT
+
+Architecture principle:
+
+EXTEND THE EXISTING SYSTEM.
+DO NOT REBUILD IT.
+
+Execution principle:
+
+AUDIT → IMPLEMENT → VERIFY → COMMIT → STOP)wjibd ke dployy dkd via. Dkd cf d ke byok. Dmd gyss dks s gss dkd gyss dnd dgs dkd gyssd ke s..
+activate_ai_developer_skill
+Lihat
+Saya akan mengerjakan Task 07 pada repository Sparkmind-obp-off/Affiliate.os, branch main, lalu commit, push, migrasi, dan deploy melalui Cloudflare BYOK.
+
+Catatan awal:
+
+Jika repo memakai framework non-default (mis. Next.js), preview/deploy satu-klik platform tidak tersedia; build Cloudflare harus dilakukan di sandbox Linux dan mungkin memerlukan iterasi OpenNext tambahan. BYOK via Wrangler tetap dapat digunakan sesuai konfigurasi repo.
+Kredensial Clerk/OpenAI yang terlihat di pesan sudah terekspos. Saya tidak akan menyalin atau memasukkannya ke kode/log, dan menyarankan seluruh secret tersebut dirotasi setelah pekerjaan ini.
+Saya akan mempertahankan arsitektur yang ada dan berhenti setelah Task 07.
+Berpikir Mendalam
+Total: 7 Tugas
+7 tugas yang harus dilakukan tersisa
+Audit repository, branch, Task 06 architecture, migrations, tests, and security hygiene
+Design and implement minimal Task 07 RBAC authorization foundation
+Create and verify forward-only database migration
+Run focused security, tenant-isolation, regression, and full verification tests
+Commit Task 07 changes and push main to existing GitHub repository
+Configure BYOK Cloudflare secrets/migrations, deploy, and verify production
+Produce exact final implementation and verification report
+Setup GitHub Environment
+Lihat
+List Directory
+/home/user/webapp
+Lihat
+Read File
+/home/user/uploaded_files/api.task.5.y.dff.gnspark.q.w.www.www.txt
+Lihat
+     1	"Code
+     2	dfff gnsparkk.hrdeninggg.q.qq.q1.txt
+     3	82.83 KB
+...
+    77	introduce another auth provider
+    78	build Module 16 Policy & Authorization
+    79	build Module 17 TikTok connectors
+    80	build billing
+Bash Command
+cd /home/user/webapp && git status --short --branch && git remote -v && git log -8 --oneline --decorate
+Lihat
+## main...origin/main
+origin	https://github.com/Sparkmind-obp-off/Affiliate.os.git (fetch)
+origin	https://github.com/Sparkmind-obp-off/Affiliate.os.git (push)
+...
+14c5b4c feat(task-05): complete auth secret and production verification
+7c4ab4b feat(task-05): activate production persistence and verification
+b87096d docs: add external stack master inventory
+6631af8 feat(module-05): add opportunity persistence lifecycle
+Exit Code: 0
+Find Files
+src/**/*
+Lihat
+Find Files
+migrations/**/*
+Lihat
+Find Files
+tests/**/*
+Lihat
+Search Content
+Module 15|identity|workspace|membership|authorization|role
+Lihat
+List Directory
+/home/user/webapp/src
+Lihat
+List Directory
+/home/user/webapp/tests
+Lihat
+List Directory
+/home/user/webapp/migrations
+Lihat
+Read File
+/home/user/webapp/package.json
+Lihat
+     1	{
+     2	  "name": "affiliate-os",
+     3	  "version": "0.1.0",
+...
+    41	    "vitest": "^2.1.8",
+    42	    "wrangler": "^3.99.0"
+    43	  }
+    44	}
+Read File
+/home/user/webapp/.gitignore
+Lihat
+     1	# ── Dependencies ───────────────────────────────────────────────
+     2	node_modules/
+     3	.pnp
+...
+    67	*.bak
+    68	*.backup
+    69	*.dump
+    70	*.sql.gz
+Bash Command
+cd /home/user/webapp && git ls-files | sed -n '1,240p'
+Lihat
+.dev.vars.example
+.env.example
+.gitignore
+...
+tsconfig.json
+vite.config.ts
+vitest.config.ts
+wrangler.jsonc
+Exit Code: 0
+Bash Command
+cd /home/user/webapp && git pull --ff-only origin main && git status --short --branch && git rev-parse HEAD
+Lihat
+From https://github.com/Sparkmind-obp-off/Affiliate.os
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+## main...origin/main
+3d2b4e52510f30608a9b98b0b73bec68b52fd11a
+Exit Code: 0
+Read File
+/home/user/webapp/migrations/0003_module_15_identity_tenancy.sql
+Lihat
+     1	-- TASK 06: Identity, Account & Tenancy foundation.
+     2	CREATE TABLE module_15.accounts (
+     3	  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+...
+    34	CREATE INDEX idx_module_15_memberships_workspace ON module_15.workspace_memberships(workspace_id, status);
+    35	ALTER TABLE module_05.opportunities
+    36	  ADD CONSTRAINT fk_module_05_opportunities_workspace
+    37	  FOREIGN KEY (workspace_id) REFERENCES module_15.workspaces(id) ON DELETE RESTRICT NOT VALID;
+Read File
+/home/user/webapp/src/modules/module-15-identity/domain/models.ts
+Lihat
+     1	export const IDENTITY_PROVIDER = 'clerk' as const
+     2	export const ACCOUNT_STATUSES = ['active', 'suspended'] as const
+     3	export const WORKSPACE_STATUSES = ['active', 'suspended'] as const
+...
+    48	  account: Account
+    49	  workspace: Workspace
+    50	  membership: WorkspaceMembership
+    51	}
+Read File
+/home/user/webapp/src/modules/module-15-identity/application/ports.ts
+Lihat
+     1	import type { AuthenticatedIdentity, ResolvedIdentityContext } from '../domain/models.js'
+     2	
+     3	export interface IdentityContextRepository {
+...
+     6	
+     7	export interface ExternalIdentityAuthenticator {
+     8	  authenticate(authorization: string | undefined): Promise<AuthenticatedIdentity>
+     9	}
+Read File
+/home/user/webapp/src/modules/module-15-identity/application/resolve-identity-context.ts
+Lihat
+     1	import { AppError } from '../../../shared/errors/app-error.js'
+     2	import type { AuthenticatedIdentity, ResolvedIdentityContext } from '../domain/models.js'
+     3	import type { IdentityContextRepository } from './ports.js'
+...
+    26	    throw AppError.internal('Resolved identity context is inconsistent')
+    27	  }
+    28	  return resolved
+    29	}
+Read File
+/home/user/webapp/src/modules/module-15-identity/infrastructure/persistence/postgres-identity-repository.ts
+Lihat
+     1	import type { Pool, PoolClient } from 'pg'
+     2	import { AppError } from '../../../../shared/errors/app-error.js'
+     3	import type { IdentityContextRepository } from '../../application/ports.js'
+...
+    96	    workspace: { id: row.workspace_id, name: row.workspace_name, slug: row.workspace_slug, ownerAccountId: row.ow...
+    97	    membership: { id: row.membership_id, workspaceId: row.workspace_id, accountId: row.account_id, role: 'owner',...
+    98	  }
+    99	}
+Read File
+/home/user/webapp/src/modules/module-16-security/index.ts
+Lihat
+     1	/**
+     2	 * SECURITY, POLICY & GOVERNANCE ENGINE
+     3	 * Module: module-16-security
+...
+    14	
+    15	export const MODULE_ID = 'module-16-security' as const
+    16	export const MODULE_TITLE = 'Security, Policy & Governance Engine' as const
+    17	export const MODULE_STATUS = 'NOT_IMPLEMENTED' as const
+Read File
+/home/user/webapp/src/modules/module-16-security/MODULE.md
+Lihat
+     1	# module-16-security
+     2	
+     3	**Title:** Security, Policy & Governance Engine
+...
+    19	├── application/      # use cases, application services
+    20	├── infrastructure/   # repositories, adapters
+    21	└── index.ts          # public contract
+    22	```
+Read File
+/home/user/webapp/src/app/routes/api-v1.ts
+Lihat
+     1	import { Hono } from 'hono'
+     2	import { successEnvelope } from '../../shared/http/envelope.js'
+     3	import { opportunityRoutes } from '@modules/module-05-opportunity'
+...
+    62	apiV1.route('/affiliate', opportunityRoutes)
+    63	
+    64	// Module 15 — external identity to internal account/workspace context.
+    65	apiV1.route('/identity', identityRoutes)
+Read File
+/home/user/webapp/src/app/create-app.ts
+Lihat
+     1	import { Hono } from 'hono'
+     2	import { cors } from 'hono/cors'
+     3	import { secureHeaders } from 'hono/secure-headers'
+...
+    31	  app.route('/api/v1', apiV1)
+    32	
+    33	  return app
+    34	}
+Read File
+/home/user/webapp/src/app/types.ts
+Lihat
+     1	import type { AppConfig } from '../shared/config/env.js'
+     2	import type { Logger } from '../shared/logging/logger.js'
+     3	import type { RequestContext } from '../shared/http/request-context.js'
+...
+    31	export type AppEnv = {
+    32	  Bindings: Bindings
+    33	  Variables: Variables
+    34	}
+Read File
+/home/user/webapp/src/shared/http/request-context.ts
+Lihat
+     1	/**
+     2	 * Request context primitives.
+     3	 *
+...
+    57	    idempotencyKey,
+    58	    startedAt: now(),
+    59	  }
+    60	}
+Read File
+/home/user/webapp/src/shared/errors/app-error.ts
+Lihat
+     1	import {
+     2	  ERROR_CODES,
+     3	  ERROR_HTTP_STATUS,
+...
+    76	
+    77	export function isAppError(value: unknown): value is AppError {
+    78	  return value instanceof AppError
+    79	}
+Read File
+/home/user/webapp/src/shared/errors/error-codes.ts
+Lihat
+     1	/**
+     2	 * Canonical, machine-readable error codes.
+     3	 *
+...
+    55	  TIMEOUT: true,
+    56	  NOT_IMPLEMENTED: false,
+    57	  INTERNAL_ERROR: false,
+    58	}
+Read File
+/home/user/webapp/src/modules/module-05-opportunity/infrastructure/http/opportunity-routes.ts
+Lihat
+     1	/**
+     2	 * HTTP adapter for Module 05 (DOC 24 §316 `infrastructure/http`, §326).
+     3	 *
+...
+   209	})
+   210	
+   211	/** Batch limit is part of the published contract, so expose it. */
+   212	export const OPPORTUNITY_MAX_BATCH_SIZE = MAX_BATCH_SIZE
+Read File
+/home/user/webapp/src/modules/module-05-opportunity/infrastructure/http/opportunity-auth.ts
+Lihat
+     1	import { AppError } from '../../../../shared/errors/app-error.js'
+     2	import type { OpportunityTenantContext } from '../../application/ports.js'
+     3	
+...
+    90	  const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, '=')
+    91	  const binary = atob(padded)
+    92	  return Uint8Array.from(binary, (char) => char.charCodeAt(0))
+    93	}
+Read File
+/home/user/webapp/src/modules/module-15-identity/infrastructure/http/identity-routes.ts
+Lihat
+     1	import { Hono, type Context } from 'hono'
+     2	import type { AppEnv } from '../../../../app/types.js'
+     3	import { AppError } from '../../../../shared/errors/app-error.js'
+...
+    63	identityRoutes.get('/membership/current', async (c) => {
+    64	  const { membership } = await current(c); const ctx = c.get('ctx')
+    65	  return c.json(successEnvelope({ membership }, { requestId: ctx.requestId, correlationId: ctx.correlationId }))
+    66	})
+Read File
+/home/user/webapp/src/modules/module-15-identity/index.ts
+Lihat
+     1	/** Public contract for Identity, Account & Tenancy (Task 06). */
+     2	export const MODULE_ID = 'module-15-identity' as const
+     3	export const MODULE_TITLE = 'Identity, Account & Tenancy Architecture' as const
+...
+     9	export * from './infrastructure/auth/clerk-jwt-authenticator.js'
+    10	export * from './infrastructure/persistence/postgres-identity-repository.js'
+    11	export { createPostgresIdentityRepository } from './infrastructure/persistence/postgres-client.js'
+    12	export { identityRoutes } from './infrastructure/http/identity-routes.js'
+Read File
+/home/user/webapp/tests/unit/identity-context.test.ts
+Lihat
+     1	import { describe, expect, it } from 'vitest'
+     2	import { resolveIdentityContext, type AuthenticatedIdentity, type IdentityContextRepository, type ResolvedIdentit...
+     3	
+...
+    39	    expect(new Set(results.map((item) => item.workspace.id))).toEqual(new Set(['w']))
+    40	    expect(new Set(results.map((item) => item.membership.id))).toEqual(new Set(['m']))
+    41	  })
+    42	})
+Read File
+/home/user/webapp/tests/integration/identity-api.test.ts
+Lihat
+     1	import { describe, expect, it } from 'vitest'
+     2	import { createApp } from '../../src/app/create-app.js'
+     3	import type { ExternalIdentityAuthenticator, IdentityContextRepository, ResolvedIdentityContext } from '@modules/...
+...
+    35	    expect(response.status).toBe(200)
+    36	    expect(((await response.json()) as { data: Record<string, unknown> }).data[key]).toBeTruthy()
+    37	  })
+    38	})
+Read File
+/home/user/webapp/tests/architecture/module-15-tenancy.test.ts
+Lihat
+     1	import { describe, expect, it } from 'vitest'
+     2	import { readFile } from 'node:fs/promises'
+     3	import path from 'node:path'
+...
+    21	    expect(source).toContain("client.query('COMMIT')")
+    22	    expect(source).toContain("client.query('ROLLBACK')")
+    23	  })
+    24	})
+Read File
+/home/user/webapp/src/modules/module-05-opportunity/application/ports.ts
+Lihat
+     1	import type { OpportunityEvaluation } from '../domain/evaluator.js'
+     2	import type { OpportunityCandidate } from '../domain/signals.js'
+     3	
+...
+    43	  now(): Date
+    44	}
+    45	
+    46	export const systemClock: Clock = { now: () => new Date() }
+Read File
+/home/user/webapp/src/modules/module-05-opportunity/infrastructure/persistence/postgres-opportunity-repository.ts
+Lihat
+     1	import { AppError } from '../../../../shared/errors/app-error.js'
+     2	import { evaluateRequestSchema } from '../../application/schemas.js'
+     3	import { opportunityModelVersions } from '../../application/opportunity-lifecycle.js'
+...
+   111	}
+   112	function isUniqueViolation(error: unknown): boolean {
+   113	  return !!error && typeof error === 'object' && 'code' in error && error.code === '23505'
+   114	}
+Read File
+/home/user/webapp/tests/unit/opportunity-persistence.test.ts
+Lihat
+     1	import { describe, expect, it, vi } from 'vitest'
+     2	import {
+     3	  PostgresOpportunityRepository,
+...
+    52	    const repository = new PostgresOpportunityRepository(db)
+    53	    await expect(repository.findByRef(WORKSPACE, 'OPP-00124')).rejects.toMatchObject({ code: 'INTERNAL_ERROR' })
+    54	  })
+    55	})
+Bash Command
+cd /home/user/webapp && npm run verify
+Lihat
+🔄 Background Task Started
+Shell ID: bash_cbda59fe
+Command: cd /home/user/webapp && npm run verify
+Status: running
+Status: running
+Bash Command
+cd /home/user/webapp && npm run db:migrate:status
+Lihat
+🔄 Background Task Started
+Shell ID: bash_52a410b9
+Command: cd /home/user/webapp && npm run db:migrate:status
+Status: running
+Status: running
+Bash Command
+cd /home/user/webapp && printf 'Current accidental artifacts:\n' && git ls-files | grep -E '(^|/)(Dff\.gnspark|dfff\.gnspark\.pshh\.gthubb\.q\.q,w\.q\.txt)$' || true && printf 'Tracked archives:\n' && git ls-files '*.zip' '*.tar.gz' && printf 'Archive entries (names only):\n' && unzip -l Download.affiliate.os.1.1.1m1.1.1.1.zip | sed -n '1,80p'
+Lihat
+Current accidental artifacts:
+Tracked archives:
+Download.affiliate.os.1.1.1m1.1.1.1.zip
+...
+    15855  2026-09-02 11:40   EXECUTION PROMPT #U2014 TASK 01.md
+    31688  2026-09-02 11:31   MASTER SYSTEM PROMPT #U2014 AFFILIATE OS v1.0.md
+---------                     -------
+   870745                     43 files
+Exit Code: 0
+Read File
+/home/user/webapp/tsconfig.json
+Lihat
+     1	{
+     2	  "compilerOptions": {
+     3	    "target": "ES2022",
+...
+    26	  },
+    27	  "include": ["src/**/*.ts", "tests/**/*.ts", "vite.config.ts", "vitest.config.ts"],
+    28	  "exclude": ["node_modules", "dist", ".wrangler"]
+    29	}
+Read File
+/home/user/webapp/tests/architecture/boundaries.test.ts
+Lihat
+     1	import { describe, it, expect } from 'vitest'
+     2	import { readdir, readFile, stat } from 'node:fs/promises'
+     3	import path from 'node:path'
+...
+   265	    // Task 01 boundary: schemas only, no tables yet.
+   266	    expect(sql).not.toMatch(/CREATE TABLE/i)
+   267	  })
+   268	})
+Read File
+/home/user/webapp/scripts/migrate.mjs
+Lihat
+     1	#!/usr/bin/env node
+     2	/**
+     3	 * PostgreSQL migration runner (foundation).
+...
+   170	  // Never print the connection string / credentials.
+   171	  console.error(`MIGRATION ERROR: ${error.message}`)
+   172	  process.exit(1)
+   173	})
+Read File
+/home/user/webapp/src/shared/config/env.ts
+Lihat
+     1	import { z } from 'zod'
+     2	
+     3	/**
+...
+   154	    clerkJwksUrl: value.CLERK_JWKS_URL ?? null,
+   155	    clerkAuthorizedParty: value.CLERK_AUTHORIZED_PARTY ?? null,
+   156	  })
+   157	}
+Read File
+/home/user/webapp/wrangler.jsonc
+Lihat
+     1	{
+     2	  // Affiliate OS — Cloudflare Pages configuration.
+     3	  //
+...
+    11	  "compatibility_date": "2024-12-01",
+    12	  "compatibility_flags": ["nodejs_compat"],
+    13	  "pages_build_output_dir": "./dist"
+    14	}
+Bash Output
+Lihat
+Bash Output
+Lihat
+Read File
+/home/user/webapp/tests/integration/opportunity-persistence-api.test.ts
+Lihat
+     1	import { describe, expect, it } from 'vitest'
+     2	import { createApp } from '../../src/app/create-app.js'
+     3	import { AppError } from '../../src/shared/errors/app-error.js'
+...
+   106	    const body = JSON.stringify(await unauth.json())
+   107	    expect(body).not.toMatch(/postgres:\/\/|DATABASE_URL|stack|node_modules/i)
+   108	  })
+   109	})
+Read File
+/home/user/webapp/src/modules/module-05-opportunity/application/opportunity-lifecycle.ts
+Lihat
+     1	import { AppError } from '../../../shared/errors/app-error.js'
+     2	import { evaluateOpportunity } from '../domain/evaluator.js'
+     3	import type { OpportunityCandidate } from '../domain/signals.js'
+...
+    86	  return { ...describeScoringModel().versions }
+    87	}
+    88	
+    89	export type { OpportunityCandidate }
+Read File
+/home/user/webapp/tests/architecture/module-05-layering.test.ts
+Lihat
+     1	import { describe, it, expect } from 'vitest'
+     2	import { readdir, readFile, stat } from 'node:fs/promises'
+     3	import path from 'node:path'
+...
+   167	      expect(mounted.has(pending.path), `${pending.path} is both mounted and pending`).toBe(false)
+   168	    }
+   169	  })
+   170	})
+Read File
+/home/user/webapp/README.md
+Lihat
+     1	# Affiliate OS v1.0
+     2	
+     3	Modular SaaS Operating System for affiliate intelligence, content operations,
+...
+   345	- **Production URL:** https://affiliate-os.pages.dev
+   346	- **Status:** ✅ Active
+   347	- **Tech stack:** Hono + TypeScript + Zod + Vitest + Wrangler
+   348	- **Last updated:** 2026-09-03 (TASK 05 persistence hardening and security assurance)
+Read File
+/home/user/webapp/migrations/README.md
+Lihat
+     1	# Migrations — Affiliate OS
+     2	
+     3	PostgreSQL is the production database (DOC 24 §314). SQLite, in-memory and
+...
+    52	| `0002_module_05_opportunity_lifecycle.sql` | minimum persistent Module 05 opportunity lifecycle | ready |
+    53	| `0003_module_15_identity_tenancy.sql` | Task 06 account, identity, workspace, membership, and ownership constra...
+    54	
+    55	Migration `0003` is forward-only and establishes the minimum tenant boundary. It does not implement policy/RBAC.
+Read File
+/home/user/webapp/src/modules/module-15-identity/infrastructure/persistence/postgres-client.ts
+Lihat
+     1	import { Pool } from 'pg'
+     2	import { PostgresIdentityContextRepository } from './postgres-identity-repository.js'
+     3	
+...
+    17	    pools.set(key, pool)
+    18	  }
+    19	  return new PostgresIdentityContextRepository(pool)
+    20	}
+Bash Output
+Lihat
+Berpikir Mendalam
+Total: 7 Tugas
+6 tugas yang harus dilakukan tersisa
+Audit repository, branch, Task 06 architecture, migrations, tests, and security hygiene
+Design and implement minimal Task 07 RBAC authorization foundation
+Create and verify forward-only database migration
+Run focused security, tenant-isolation, regression, and full verification tests
+Commit Task 07 changes and push main to existing GitHub repository
+Configure BYOK Cloudflare secrets/migrations, deploy, and verify production
+Produce exact final implementation and verification report
+Write File
+/home/user/webapp/src/modules/module-16-security/domain/authorization.ts
+Lihat
+import type { ResolvedIdentityContext } from '@modules/module-15-identity'
+
+export const PERMISSIONS = [
+...
+  if (resource && resource.workspaceId !== workspace.id) return deny('cross_tenant_resource')
+
+  return { effect: 'ALLOW', reason: 'authorized' }
+}
+Write File
+/home/user/webapp/src/modules/module-16-security/application/authorize.ts
+Lihat
+import { AppError } from '../../../shared/errors/app-error.js'
+import {
+  authorize,
+...
+  permissions: readonly Permission[]
+} {
+  return { role, permissions: permissionsForRole(role) }
+}
+Write File
+/home/user/webapp/migrations/0004_module_16_authorization_rbac.sql
+Lihat
+-- TASK 07: Authorization, RBAC, and tenant access-control foundation.
+-- Module 15 continues to own membership identity; Module 16 constrains the
+-- supported role vocabulary and records the deterministic permission catalog.
+...
+  ('opportunity.create', 'Create workspace-owned opportunities');
+
+CREATE INDEX idx_module_15_memberships_workspace_role_status
+  ON module_15.workspace_memberships(workspace_id, role, status);
+Multi Edit
+/home/user/webapp/src/modules/module-15-identity/domain/models.ts
+Lihat
+--- a//home/user/webapp/src/modules/module-15-identity/domain/models.ts+++ b//home/user/webapp/src/modules/module-15-identity/domain/models.ts@@ -2,7 +2,7 @@ export const ACCOUNT_STATUSES = ['active', 'suspended'] as const
+ export const WORKSPACE_STATUSES = ['active', 'suspended'] as const
+ export const MEMBERSHIP_STATUSES = ['active', 'suspended'] as const
+-export const MEMBERSHIP_ROLES = ['owner'] as const
++export const MEMBERSHIP_ROLES = ['owner', 'admin', 'member'] as const
+ 
+ export type IdentityProvider = typeof IDENTITY_PROVIDER
+ export type AccountStatus = (typeof ACCOUNT_STATUSES)[number]
+Multi Edit
+/home/user/webapp/src/modules/module-15-identity/infrastructure/persistence/postgres-identity-repository.ts
+Lihat
+--- a//home/user/webapp/src/modules/module-15-identity/infrastructure/persistence/postgres-identity-repository.ts+++ b//home/user/webapp/src/modules/module-15-identity/infrastructure/persistence/postgres-identity-repository.ts@@ -87,13 +87,13 @@ }
+ function iso(value: Date | string): string { return (value instanceof Date ? value : new Date(value)).toISOString() }
+ function mapContext(row: ContextRow): ResolvedIdentityContext {
+-  if (row.provider !== 'clerk' || !['active', 'suspended'].includes(row.account_status) || !['active', 'suspended'].includes(row.workspace_status) || !['active', 'suspended'].includes(row.membership_status) || row.membership_role !== 'owner') {
++  if (row.provider !== 'clerk' || !['active', 'suspended'].includes(row.account_status) || !['active', 'suspended'].includes(row.workspace_status) || !['active', 'suspended'].includes(row.membership_status) || !['owner', 'admin', 'member'].includes(row.membership_role)) {
+     throw AppError.internal('Stored identity context is invalid')
+   }
+   return {
+     authenticatedIdentity: { provider: 'clerk', subject: row.provider_subject },
+     account: { id: row.account_id, displayName: row.display_name, status: row.account_status as 'active' | 'suspended', createdAt: iso(row.account_created_at), updatedAt: iso(row.account_updated_at) },
+     workspace: { id: row.workspace_id, name: row.workspace_name, slug: row.workspace_slug, ownerAccountId: row.owner_account_id, status: row.workspace_status as 'active' | 'suspended', createdAt: iso(row.workspace_created_at), updatedAt: iso(row.workspace_updated_at) },
+-    membership: { id: row.membership_id, workspaceId: row.workspace_id, accountId: row.account_id, role: 'owner', status: row.membership_status as 'active' | 'suspended', createdAt: iso(row.membership_created_at), updatedAt: iso(row.membership_updated_at) },
++    membership: { id: row.membership_id, workspaceId: row.workspace_id, accountId: row.account_id, role: row.membership_role as 'owner' | 'admin' | 'member', status: row.membership_status as 'active' | 'suspended', createdAt: iso(row.membership_created_at), updatedAt: iso(row.membership_updated_at) },
+   }
+ }
+Multi Edit
+/home/user/webapp/src/modules/module-16-security/index.ts
+Lihat
+--- a//home/user/webapp/src/modules/module-16-security/index.ts+++ b//home/user/webapp/src/modules/module-16-security/index.ts@@ -1,17 +1,7 @@-/**
+- * SECURITY, POLICY & GOVERNANCE ENGINE
+- * Module: module-16-security
+- * Architecture reference: DOC 16 + 14A
+- *
+- * PUBLIC CONTRACT — this file is the ONLY legal import surface of this module.
+- * Other modules MUST import from '@modules/module-16-security' and MUST NOT reach into
+- * this module's internal folders (enforced by tests/architecture).
+- *
+- * STATUS: NOT_IMPLEMENTED (foundation only, AFFILIATE-OS-FOUNDATION-001).
+- * Domain, application, and infrastructure layers are added by this module's
+- * own dedicated implementation task.
+- */
+-
++/** Public contract for Authorization, RBAC & Tenant Access Control (Task 07). */
+ export const MODULE_ID = 'module-16-security' as const
+ export const MODULE_TITLE = 'Security, Policy & Governance Engine' as const
+-export const MODULE_STATUS = 'NOT_IMPLEMENTED' as const
++export const MODULE_STATUS = 'FOUNDATION_IMPLEMENTED' as const
++
++export * from './domain/authorization.js'
++export * from './application/authorize.js'
+Multi Edit
+/home/user/webapp/src/modules/module-16-security/MODULE.md
+Lihat
+--- a//home/user/webapp/src/modules/module-16-security/MODULE.md+++ b//home/user/webapp/src/modules/module-16-security/MODULE.md@@ -2,7 +2,7 @@ 
+ **Title:** Security, Policy & Governance Engine
+ **Architecture reference:** DOC 16 + 14A
+-**Status:** NOT_IMPLEMENTED — foundation only
++**Status:** FOUNDATION_IMPLEMENTED — Task 07 authorization/RBAC boundary
+ 
+ ## Boundary rules
+ 
+@@ -11,12 +11,14 @@ - Cross-module communication happens through the public contract, an application
+   service, an API call, or an event — never through internal file access.
+ 
+-## Expected internal structure (created by the implementing task)
++## Implemented Task 07 boundary
+ 
+-```text
+-module-16-security/
+-├── domain/           # entities, value objects, domain services
+-├── application/      # use cases, application services
+-├── infrastructure/   # repositories, adapters
+-└── index.ts          # public contract
+-```
++- Deterministic, deny-by-default `authorize` decision service.
++- Minimal `owner` / `admin` / `member` role policy.
++- Atomic permissions for current workspace, membership, and opportunity capabilities.
++- Account, workspace, membership, role, permission, ownership, and resource-tenant checks.
++- Reusable `requirePermission` application boundary; route handlers do not interpret roles.
++
++The application policy is authoritative. Migration `0004` stores the permission catalog for
++integrity/discoverability and expands Module 15's membership-role constraint without changing
++existing owner memberships. No client-supplied role or permission is trusted.
+Multi Edit
+/home/user/webapp/src/modules/module-05-opportunity/infrastructure/http/opportunity-routes.ts
+Lihat
+--- a//home/user/webapp/src/modules/module-05-opportunity/infrastructure/http/opportunity-routes.ts+++ b//home/user/webapp/src/modules/module-05-opportunity/infrastructure/http/opportunity-routes.ts@@ -45,6 +45,7 @@   type ExternalIdentityAuthenticator,
+   type IdentityContextRepository,
+ } from '@modules/module-15-identity'
++import { requirePermission, type Permission } from '@modules/module-16-security'
+ 
+ /** Read a JSON body without leaking parser internals (DOC 22 §223). */
+ async function readJsonBody(raw: Request): Promise<unknown> {
+@@ -141,7 +142,7 @@   return createPostgresOpportunityRepository(config.databaseUrl, config.databaseSsl)
+ }
+ 
+-async function authenticate(c: Context<AppEnv>) {
++async function authenticate(c: Context<AppEnv>, permission: Permission) {
+   const config = c.get('config')
+   if (config.clerkIssuer && config.clerkJwksUrl && config.databaseUrl) {
+     const injected = c.env as unknown as {
+@@ -159,6 +160,12 @@     )
+     const identity = await authenticator.authenticate(c.req.header('authorization'))
+     const resolved = await resolveIdentityContext(identity, repository)
++    requirePermission({ context: resolved, permission })
++    Object.assign(c.get('ctx'), {
++      authenticatedIdentity: resolved.authenticatedIdentity,
++      accountId: resolved.account.id,
++      workspaceId: resolved.workspace.id,
++    })
+     return {
+       userId: resolved.account.id,
+       organizationId: resolved.workspace.id,
+@@ -171,7 +178,7 @@ 
+ opportunityRoutes.post('/opportunities', async (c) => {
+   const ctx = c.get('ctx')
+-  const tenant = await authenticate(c)
++  const tenant = await authenticate(c, 'opportunity.create')
+   const repository = resolveRepository(c)
+   const payload = await readJsonBody(c.req.raw)
+   const opportunity = await executeCreateOpportunity(payload, tenant.workspaceId, { repository })
+@@ -183,7 +190,7 @@ 
+ opportunityRoutes.get('/opportunities', async (c) => {
+   const ctx = c.get('ctx')
+-  const tenant = await authenticate(c)
++  const tenant = await authenticate(c, 'opportunity.read')
+   const repository = resolveRepository(c)
+   const limit = parseOpportunityListLimit(c.req.query('limit'))
+   const opportunities = await executeListOpportunities(tenant.workspaceId, limit, repository)
+@@ -201,7 +208,7 @@   const ref = c.req.param('candidateRef')
+   if (RESERVED_SUBPATHS.has(ref)) throw AppError.notFound('Endpoint not found')
+   const ctx = c.get('ctx')
+-  const tenant = await authenticate(c)
++  const tenant = await authenticate(c, 'opportunity.read')
+   const opportunity = await executeGetOpportunity(ref, tenant.workspaceId, resolveRepository(c))
+   return c.json(
+     successEnvelope({ opportunity }, { requestId: ctx.requestId, correlationId: ctx.correlationId }),
+Write File
+/home/user/webapp/tests/unit/authorization.test.ts
+Lihat
+import { describe, expect, it } from 'vitest'
+import type { ResolvedIdentityContext } from '@modules/module-15-identity'
+import {
+...
+    const request = { context: context('member'), permission: 'workspace.manage' as Permission }
+    expect(() => requirePermission(request)).toThrowError(expect.objectContaining({ code: 'FORBIDDEN', message: 'Operati...
+  })
+})
+Write File
+/home/user/webapp/tests/architecture/module-16-authorization.test.ts
+Lihat
+import { describe, expect, it } from 'vitest'
+import { readFile } from 'node:fs/promises'
+import path from 'node:path'
+...
+    expect(repository).toMatch(/INSERT INTO module_05\.opportunities/)
+    expect(repository).toContain('record.workspaceId')
+  })
+})
+Write File
+/home/user/webapp/tests/integration/opportunity-authorization-api.test.ts
+Lihat
+import { describe, expect, it } from 'vitest'
+import { createApp } from '../../src/app/create-app.js'
+import { AppError } from '../../src/shared/errors/app-error.js'
+...
+    )
+    expect(response.status).toBe(404)
+  })
+})
+Bash Command
+cd /home/user/webapp && npm run typecheck
+Lihat
+🔄 Background Task Started
+Shell ID: bash_17fbdbe4
+Command: cd /home/user/webapp && npm run typecheck
+Status: running
+Status: running
+Bash Command
+cd /home/user/webapp && npx vitest run tests/unit/authorization.test.ts tests/integration/opportunity-authorization-api.test.ts tests/architecture/module-16-authorization.test.ts
+Lihat
+🔄 Background Task Started
+Shell ID: bash_6012992f
+Command: cd /home/user/webapp && npx vitest run tests/unit/authorization.test.ts tests/integration/opportunity-authorization-api.test.ts tests/architecture/module-16-authorization.test.ts
+Status: running
+Status: running
+Bash Command
+cd /home/user/webapp && git diff --check && git status --short
+Lihat
+ M src/modules/module-05-opportunity/infrastructure/http/opportunity-routes.ts
+ M src/modules/module-15-identity/domain/models.ts
+ M src/modules/module-15-identity/infrastructure/persistence/postgres-identity-repository.ts
+...
+?? src/modules/module-16-security/domain/
+?? tests/architecture/module-16-authorization.test.ts
+?? tests/integration/opportunity-authorization-api.test.ts
+?? tests/unit/authorization.test.ts
+Exit Code: 0
+Bash Output
+Lihat
+Bash Output
+Lihat
+Edit File
+/home/user/webapp/src/modules/module-16-security/domain/authorization.ts
+Lihat
+--- a//home/user/webapp/src/modules/module-16-security/domain/authorization.ts+++ b//home/user/webapp/src/modules/module-16-security/domain/authorization.ts@@ -97,7 +97,8 @@   if (workspace.status !== 'active') return deny('inactive_workspace')
+   if (membership.status !== 'active') return deny('missing_or_inactive_membership')
+   if (!isAuthorizationRole(membership.role)) return deny('invalid_role')
+-  if (!isPermission(permission) || !ROLE_PERMISSIONS[membership.role].includes(permission)) {
++  const granted = ROLE_PERMISSIONS[membership.role] as readonly Permission[]
++  if (!isPermission(permission) || !granted.includes(permission)) {
+     return deny('missing_permission')
+   }
+   if (resource && resource.workspaceId !== workspace.id) return deny('cross_tenant_resource')
+Bash Command
+cd /home/user/webapp && npm run typecheck
+Lihat
+🔄 Background Task Started
+Shell ID: bash_a5c1dafa
+Command: cd /home/user/webapp && npm run typecheck
+Status: running
+Status: running
+Bash Command
+cd /home/user/webapp && npm run lint
+Lihat
+🔄 Background Task Started
+Shell ID: bash_c5383e77
+Command: cd /home/user/webapp && npm run lint
+Status: running
+Status: running
+Bash Command
+cd /home/user/webapp && npx vitest run tests/unit/authorization.test.ts tests/integration/opportunity-authorization-api.test.ts tests/architecture/module-16-authorization.test.ts
+Lihat
+🔄 Background Task Started
+Shell ID: bash_36f20485
+Command: cd /home/user/webapp && npx vitest run tests/unit/authorization.test.ts tests/integration/opportunity-authorization-api.test.ts tests/architecture/module-16-authorization.test.ts
+Status: running
+Status: running
+Bash Output
+Lihat
+Bash Output
+Lihat
+Bash Output
+Lihat
+Bash Output
+Lihat
+Bash Output
+Lihat
+Bash Output
+Lihat
+Bash Output
+Lihat
+Bash Output
+Lihat
+Bash Output
+Lihat
+Multi Edit
+/home/user/webapp/README.md
+Lihat
+--- a//home/user/webapp/README.md+++ b//home/user/webapp/README.md@@ -4,7 +4,7 @@ performance optimization, revenue intelligence, automation, billing, and
+ ecosystem commerce.
+ 
+-> **Current state: FOUNDATION + PERSISTENT MODULE 05 MVP + TASK 06 IDENTITY/TENANCY FOUNDATION.**
++> **Current state: FOUNDATION + PERSISTENT MODULE 05 MVP + TASK 07 AUTHORIZATION/RBAC FOUNDATION.**
+ > Tasks 01–03 established the foundation and deterministic Opportunity Engine.
+ > TASK 04 adds its minimum PostgreSQL persistence lifecycle: evaluate, persist,
+ > retrieve, and list workspace-owned opportunities. TASK 05 activates and verifies
+@@ -12,7 +12,8 @@ > independently generated Cloudflare-managed `AUTH_SECRET`, and the workerd-native
+ > PostgreSQL socket adapter. TASK 06 adds Clerk-authenticated internal accounts, workspaces,
+ > owner memberships, transactional first-login provisioning, and explicit request tenancy context.
+-> Full authorization/RBAC remains out of scope.
++> TASK 07 adds deny-by-default `owner` / `admin` / `member` RBAC and enforces permissions
++> on the persisted opportunity lifecycle while retaining repository-level tenant filtering.
+ 
+ ---
+ 
+@@ -83,6 +84,17 @@ - [x] Focused identity, suspension, consistency, API, and concurrency tests
+ - [ ] Full authorization policy/RBAC, invitations, team management, and workspace administration are intentionally deferred
+ 
++## Completed — TASK 07 (authorization, RBAC & tenant access control)
++
++- [x] Deterministic, reusable `authorize` / `requirePermission` policy boundary in Module 16
++- [x] Minimal `owner`, `admin`, and `member` roles with explicit atomic permissions
++- [x] Fail-closed account, workspace, membership, role, permission, ownership, and resource-tenant checks
++- [x] Permission enforcement on persisted opportunity create/read/list routes
++- [x] Repository-level `workspace_id` filtering retained as defense in depth
++- [x] Forward-only migration `0004` preserving all Task 06 owner memberships
++- [x] Focused role, suspension, privilege-escalation, tenant-isolation, API, and architecture tests
++- [ ] Invitations, membership administration endpoints, ownership transfer, and custom roles remain deferred
++
+ ## Completed — TASK 01/02 (foundation)
+ 
+ - [x] Project foundation (`package.json`, TypeScript strict config, Vite, Wrangler)
+@@ -106,7 +118,7 @@ 
+ - [ ] Demand discovery (Module 04) — signals are request input for now
+ - [ ] Creator fit, content, distribution, performance, revenue engines
+-- [ ] Policy & authorization enforcement (Module 16)
++- [ ] Advanced/custom authorization policies beyond the Task 07 minimal RBAC matrix
+ - [ ] Full database schema — DOC 21 §180+ table DDL
+ - [ ] TikTok / TikTok Shop connectors (Module 17)
+ - [ ] Duitku billing integration (DOC 25)
+@@ -211,18 +223,22 @@   migration fails the runner instead of drifting silently.
+ - **Tables:** migration `0002` adds `module_05.opportunities`. Migration `0003` adds
+   `module_15.accounts`, `identities`, `workspaces`, and `workspace_memberships`, with
+-  a forward foreign key from opportunities to workspaces.
++  a forward foreign key from opportunities to workspaces. Migration `0004` expands
++  membership roles to `owner` / `admin` / `member`, adds the Module 16 permission catalog,
++  and indexes workspace-role-status lookups.
+ - **Runtime:** the PostgreSQL adapter is wired only when `DATABASE_URL` is present;
+   unavailable configuration fails closed and is never replaced by D1/SQLite.
+ 
+-### Tenancy model (Task 06 foundation)
++### Identity, tenancy, and authorization model
+ 
+ ```text
+-CLERK IDENTITY → ACCOUNT → WORKSPACE MEMBERSHIP → WORKSPACE
++CLERK IDENTITY → ACCOUNT → WORKSPACE → MEMBERSHIP → ROLE → PERMISSION → DECISION
+ ```
+ 
+ Every persisted tenant-owned query remains explicitly scoped by `workspace_id`.
+-Task 06 resolves identity and tenancy only; full permission policy/RBAC is deferred.
++Module 16 denies by default when any account, workspace, membership, role, permission,
++ownership, or resource-tenant invariant fails. Roles and permissions are derived from the
++resolved server-side membership context; request payload overrides are ignored.
+ 
+ ---
+ 
+@@ -325,9 +341,9 @@ | Secure response headers        | Implemented                                        |
+ | Trace-header injection defense | Implemented — malformed ids rejected               |
+ | Persistent-route authentication| Implemented — HS256, required expiry, UUID tenant claims |
+-| Full identity ecosystem        | **PENDING** — Module 15 task                       |
+-| Authorization / policy engine  | **PENDING** — Module 16 task                       |
+-| Tenant isolation enforcement   | Implemented for Module 05 repository queries       |
++| External identity + tenancy    | Implemented — Clerk boundary + Module 15 context   |
++| Authorization / RBAC boundary  | Implemented — minimal Task 07 Module 16 policy      |
++| Tenant isolation enforcement   | Implemented — authorization + Module 05 queries     |
+ | Rate limiting                  | **PENDING**                                        |
+ | Audit log persistence          | **PENDING**                                        |
+ 
+@@ -345,4 +361,4 @@ - **Production URL:** https://affiliate-os.pages.dev
+ - **Status:** ✅ Active
+ - **Tech stack:** Hono + TypeScript + Zod + Vitest + Wrangler
+-- **Last updated:** 2026-09-03 (TASK 05 persistence hardening and security assurance)
++- **Last updated:** 2026-09-03 (TASK 07 authorization, RBAC, and tenant access control)
+Multi Edit
+/home/user/webapp/migrations/README.md
+Lihat
+--- a//home/user/webapp/migrations/README.md+++ b//home/user/webapp/migrations/README.md@@ -51,5 +51,9 @@ | `0001_extensions_and_schemas.sql` | `pgcrypto` + module schemas | ready |
+ | `0002_module_05_opportunity_lifecycle.sql` | minimum persistent Module 05 opportunity lifecycle | ready |
+ | `0003_module_15_identity_tenancy.sql` | Task 06 account, identity, workspace, membership, and ownership constraints | ready |
++| `0004_module_16_authorization_rbac.sql` | Task 07 role constraint, permission catalog, and authorization lookup index | ready |
+ 
+-Migration `0003` is forward-only and establishes the minimum tenant boundary. It does not implement policy/RBAC.
++Migration `0003` establishes the minimum tenant boundary. Migration `0004` preserves existing
++owner memberships, expands the allowed role vocabulary to `owner` / `admin` / `member`, and
++records only the permissions required by currently implemented workspace and opportunity flows.
++The deterministic role-permission matrix remains application policy in Module 16.
+Setup Cloudflare API Key
+Lihat
+Bash Command
+cd /home/user/webapp && npx wrangler whoami
+Lihat
+
+ ⛅️ wrangler 3.114.17 (update available 4.128.0)
+------------------------------------------------
+...
+├───────────────────────────────────────┼──────────────────────────────────┤
+│ Sparkmind.support@gmail.com's Account │ a167a50f1272635d3c1145aab3cd8f98 │
+└───────────────────────────────────────┴──────────────────────────────────┘
+🔓 To see token permissions visit https://dash.cloudflare.com/profile/api-tokens.
+Exit Code: 0
+Meta Info
+Lihat
+Meta Info
+Lihat
+Bash Command
+cd /home/user/webapp && KEY=$(tr -d '\r\n' < "/home/user/uploaded_files/neon-api.key.q.q.q.q.txt") && curl -fsS -H "Authorization: Bearer $KEY" "https://console.neon.tech/api/v2/projects?limit=100" | jq '{projects: [.projects[] | {id, name, region_id, created_at}]}'
+Lihat
+{
+  "projects": [
+    {
+...
+      "created_at": "2026-06-18T05:02:33Z"
+    }
+  ]
+}
+Exit Code: 0
+Bash Command
+cd /home/user/webapp && npx wrangler pages secret list --project-name affiliate-os
+Lihat
+
+ ⛅️ wrangler 3.114.17 (update available 4.128.0)
+------------------------------------------------
+...
+  - CLERK_JWKS_URL: Value Encrypted
+  - DATABASE_SSL: Value Encrypted
+  - DATABASE_URL: Value Encrypted
+  - NODE_ENV: Value Encrypted
+Exit Code: 0
+Bash Command
+cd /home/user/webapp && npx wrangler pages project list | sed -n '1,120p'
+Lihat
+┌──────────────────────────────┬────────────────────────────────────────────────────────────────────────────────────────...
+│ Project Name                 │ Project Domains                                                                        ...
+├──────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────...
+...
+│ gowes-foundry                │ gowes-foundry.pages.dev, gowes-foundry.sparkmind-obp.biz.id, gowes-foundry.web.id      ...
+├──────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────...
+│ petung-foundry               │ petung-foundry.pages.dev, petung-foundry.sparkmind-obp.biz.id                          ...
+└──────────────────────────────┴────────────────────────────────────────────────────────────────────────────────────────...
+Exit Code: 0
+Bash Command
+cd /home/user/webapp && KEY=$(tr -d '\r\n' < "/home/user/uploaded_files/neon-api.key.q.q.q.q.txt") && curl -fsS -H "Authorization: Bearer $KEY" "https://console.neon.tech/api/v2/projects/delicate-cherry-76710038/branches" | jq '{branches: [.branches[] | {id, name, primary, current_state}]}'
+Lihat
+{
+  "branches": [
+    {
+...
+      "current_state": "ready"
+    }
+  ]
+}
+Exit Code: 0
+Bash Command
+cd /home/user/webapp && KEY=$(tr -d '\r\n' < "/home/user/uploaded_files/neon-api.key.q.q.q.q.txt") && curl -fsS -H "Authorization: Bearer $KEY" "https://console.neon.tech/api/v2/projects/delicate-cherry-76710038/endpoints" | jq '{endpoints: [.endpoints[] | {id, branch_id, type, current_state, pooler_enabled}]}'
+Lihat
+{
+  "endpoints": [
+    {
+...
+      "pooler_enabled": false
+    }
+  ]
+}
+Exit Code: 0
+Bash Command
+cd /home/user/webapp && KEY=$(tr -d '\r\n' < "/home/user/uploaded_files/neon-api.key.q.q.q.q.txt") && curl -fsS -H "Authorization: Bearer $KEY" "https://console.neon.tech/api/v2/projects/delicate-cherry-76710038/branches/br-flat-art-b3vfej6v/roles" | jq '{roles: [.roles[] | {name, protected}]}'
+Lihat
+{
+  "roles": [
+    {
+...
+      "protected": false
+    }
+  ]
+}
+Exit Code: 0
+Bash Command
+cd /home/user/webapp && KEY=$(tr -d '\r\n' < "/home/user/uploaded_files/neon-api.key.q.q.q.q.txt") && curl -fsS -H "Authorization: Bearer $KEY" "https://console.neon.tech/api/v2/projects/delicate-cherry-76710038/branches/br-flat-art-b3vfej6v/databases" | jq '{databases: [.databases[] | {name, owner_name}]}'
+Lihat
+{
+  "databases": [
+    {
+...
+      "owner_name": "neondb_owner"
+    }
+  ]
+}
+Exit Code: 0
+Bash Command
+cd /home/user/webapp && umask 077 && KEY=$(tr -d '\r\n' < "/home/user/uploaded_files/neon-api.key.q.q.q.q.txt") && curl -fsS -G -H "Authorization: Bearer $KEY" --data-urlencode "branch_id=br-flat-art-b3vfej6v" --data-urlencode "endpoint_id=ep-winter-block-b3huykry" --data-urlencode "database_name=neondb" --data-urlencode "role_name=neondb_owner" "https://console.neon.tech/api/v2/projects/delicate-cherry-76710038/connection_uri" | jq -er '.uri' > /tmp/affiliate-os-database-url && test -s /tmp/affiliate-os-database-url && chmod 600 /tmp/affiliate-os-database-url && echo 'Neon connection URI acquired securely.'
+Lihat
+Neon connection URI acquired securely.
+Exit Code: 0
+Bash Command
+cd /home/user/webapp && DATABASE_URL=$(cat /tmp/affiliate-os-database-url) DATABASE_SSL=true node --input-type=module -e "import { readFile } from 'node:fs/promises'; import pg from 'pg'; const client = new pg.Client({connectionString: process.env.DATABASE_URL, ssl:{rejectUnauthorized:true}}); await client.connect(); try { await client.query('BEGIN'); await client.query(await readFile('migrations/0004_module_16_authorization_rbac.sql','utf8')); await client.query('ROLLBACK'); console.log('Migration 0004 dry-run succeeded and was rolled back.'); } catch (error) { await client.query('ROLLBACK'); console.error('Migration dry-run failed:', error.message); process.exitCode=1; } finally { await client.end(); }" && DATABASE_URL=$(cat /tmp/affiliate-os-database-url) DATABASE_SSL=true npm run db:migrate:status
+Lihat
+(node:5365) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 've...
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, ...
+
+...
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Migration dry-run failed: relation "module_15.workspace_memberships" does not exist
+Exit Code: 1
+Bash Command
+cd /home/user/webapp && DATABASE_URL=$(cat /tmp/affiliate-os-database-url) DATABASE_SSL=true npm run db:migrate:status
+Lihat
+
+> affiliate-os@0.1.0 db:migrate:status
+> node scripts/migrate.mjs status
+...
+0003     PENDING   0003_module_15_identity_tenancy.sql
+0004     PENDING   0004_module_16_authorization_rbac.sql
+
+total=4 pending=2
+Exit Code: 0
+Bash Command
+cd /home/user/webapp && DATABASE_URL=$(cat /tmp/affiliate-os-database-url) DATABASE_SSL=true node --input-type=module -e "import { readFile } from 'node:fs/promises'; import pg from 'pg'; const client = new pg.Client({connectionString: process.env.DATABASE_URL, ssl:{rejectUnauthorized:true}}); await client.connect(); try { await client.query('BEGIN'); await client.query(await readFile('migrations/0003_module_15_identity_tenancy.sql','utf8')); await client.query(await readFile('migrations/0004_module_16_authorization_rbac.sql','utf8')); await client.query('ROLLBACK'); console.log('Migrations 0003-0004 dry-run succeeded and were rolled back.'); } catch (error) { await client.query('ROLLBACK'); console.error('Migration dry-run failed:', error.message); process.exitCode=1; } finally { await client.end(); }"
+Lihat
+(node:5501) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 've...
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, ...
+
+...
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Migrations 0003-0004 dry-run succeeded and were rolled back.
+Exit Code: 0
+Bash Command
+cd /home/user/webapp && DATABASE_URL=$(cat /tmp/affiliate-os-database-url) DATABASE_SSL=true npm run db:migrate && DATABASE_URL=$(cat /tmp/affiliate-os-database-url) DATABASE_SSL=true npm run db:migrate:status
+Lihat
+
+> affiliate-os@0.1.0 db:migrate
+> node scripts/migrate.mjs up
+...
+0003     APPLIED   0003_module_15_identity_tenancy.sql
+0004     APPLIED   0004_module_16_authorization_rbac.sql
+
+total=4 pending=0
+Exit Code: 0
+Berpikir Mendalam
+Total: 7 Tugas
+4 tugas yang harus dilakukan tersisa
+Audit repository, branch, Task 06 architecture, migrations, tests, and security hygiene
+Design and implement minimal Task 07 RBAC authorization foundation
+Create and verify forward-only database migration
+Run focused security, tenant-isolation, regression, and full verification tests
+Commit Task 07 changes and push main to existing GitHub repository
+Configure BYOK Cloudflare secrets/migrations, deploy, and verify production
+Produce exact final implementation and verification report
+Bash Command
+cd /home/user/webapp && npm run verify
+Lihat
+🔄 Background Task Started
+Shell ID: bash_44c32d99
+Command: cd /home/user/webapp && npm run verify
+Status: running
+Status: running
+Bash Command
+cd /home/user/webapp && DATABASE_URL=$(cat /tmp/affiliate-os-database-url) DATABASE_SSL=true node --input-type=module -e "import pg from 'pg'; const c=new pg.Client({connectionString:process.env.DATABASE_URL,ssl:{rejectUnauthorized:true}}); await c.connect(); const q=async(t,p=[])=>await c.query(t,p); try { const roles=await q(\"SELECT pg_get_constraintdef(oid) AS definition FROM pg_constraint WHERE conname='workspace_memberships_role_check'\"); const permissions=await q('SELECT key FROM module_16.permissions ORDER BY key'); const indexes=await q(\"SELECT indexname FROM pg_indexes WHERE schemaname IN ('module_15','module_16') AND indexname='idx_module_15_memberships_workspace_role_status'\"); const counts=await q('SELECT (SELECT COUNT(*)::int FROM module_15.workspace_memberships) memberships, (SELECT COUNT(*)::int FROM module_16.permissions) permissions'); console.log(JSON.stringify({role_constraint:roles.rows[0]?.definition, permission_keys:permissions.rows.map(r=>r.key), index_present:indexes.rowCount===1, row_counts:counts.rows[0]},null,2)); } finally { await c.end(); }"
+Lihat
+(node:5770) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 've...
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, ...
+
+...
+    "memberships": 0,
+    "permissions": 6
+  }
+}
+Exit Code: 0
+Bash Command
+cd /home/user/webapp && git diff --check && test -z "$(git ls-files | grep -E '(^|/)(Dff\.gnspark|dfff\.gnspark\.pshh\.gthubb\.q\.q,w\.q\.txt)$')" && matches=$(git grep -Il -E '(sk_(test|live)_[A-Za-z0-9_-]{16,}|sk-proj-[A-Za-z0-9_-]{16,}|gh[pousr]_[A-Za-z0-9]{20,}|postgres(ql)?://[^[:space:]\"'"'"']+:[^[:space:]\"'"'"'@]+@)' -- ':!package-lock.json' || true) && if [ -n "$matches" ]; then printf 'Potential secret-bearing tracked files:\n%s\n' "$matches"; exit 1; else echo 'Tracked-file secret scan passed; accidental artifacts absent.'; fi
+Lihat
+Potential secret-bearing tracked files:
+.dev.vars.example
+.env.example
+...
+tests/unit/config.test.ts
+tests/unit/envelope.test.ts
+tests/unit/logger.test.ts
+tests/unit/opportunity-use-case.test.ts
+Exit Code: 1
+Bash Output
+Lihat
+Bash Output
+Lihat
+Bash Output
+Lihat
+Bash Command
+cd /home/user/webapp && git diff --stat && git diff -- src/modules/module-16-security src/modules/module-15-identity src/modules/module-05-opportunity/infrastructure/http/opportunity-routes.ts migrations/0004_module_16_authorization_rbac.sql tests/unit/authorization.test.ts tests/integration/opportunity-authorization-api.test.ts tests/architecture/module-16-authorization.test.ts | sed -n '1,1000p'
+Lihat
+ README.md                                          | 38 +++++++++++++++-------
+ migrations/README.md                               |  6 +++-
+ .../infrastructure/http/opportunity-routes.ts      | 15 ++++++---
+...
++export const MODULE_STATUS = 'FOUNDATION_IMPLEMENTED' as const
++
++export * from './domain/authorization.js'
++export * from './application/authorize.js'
+Exit Code: 0
+Bash Command
+cd /home/user/webapp && npx vitest run --reporter=dot | tail -n 8
+Lihat
+🔄 Background Task Started
+Shell ID: bash_0d1b992f
+Command: cd /home/user/webapp && npx vitest run --reporter=dot | tail -n 8
+Status: running
+Status: running
+Bash Command
+cd /home/user/webapp && files=$(git status --short | awk '{print $2}') && if [ -n "$files" ] && grep -IlE '(sk_(test|live)_[A-Za-z0-9_-]{16,}|sk-proj-[A-Za-z0-9_-]{16,}|gh[pousr]_[A-Za-z0-9]{20,}|-----BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY-----)' $files 2>/dev/null; then exit 1; else echo 'Changed-file credential scan passed.'; fi
+Lihat
+Changed-file credential scan passed.
+Exit Code: 0
+Bash Output
+Lihat
+Bash Output
+Lihat
+Edit File
+/home/user/webapp/src/modules/module-15-identity/infrastructure/persistence/postgres-identity-repository.ts
+Lihat
+--- a//home/user/webapp/src/modules/module-15-identity/infrastructure/persistence/postgres-identity-repository.ts+++ b//home/user/webapp/src/modules/module-15-identity/infrastructure/persistence/postgres-identity-repository.ts@@ -33,6 +33,14 @@       await client.query('SELECT pg_advisory_xact_lock(hashtext($1))', [`${identity.provider}:${identity.subject}`])
+       let row = await findContext(client, identity)
+       if (!row) {
++        const existingIdentity = await client.query<{ id: string }>(
++          `SELECT id FROM module_15.identities
++           WHERE provider = $1 AND provider_subject = $2 LIMIT 1`,
++          [identity.provider, identity.subject],
++        )
++        if (existingIdentity.rows[0]) {
++          throw AppError.tenantAccessDenied('Workspace membership is not available')
++        }
+         const account = await client.query<{ id: string }>(
+           `INSERT INTO module_15.accounts (display_name) VALUES ($1) RETURNING id`,
+           ['Affiliate OS account'],
+Multi Edit
+/home/user/webapp/tests/unit/identity-context.test.ts
+Lihat
+--- a//home/user/webapp/tests/unit/identity-context.test.ts+++ b//home/user/webapp/tests/unit/identity-context.test.ts@@ -1,5 +1,5 @@-import { describe, expect, it } from 'vitest'
+-import { resolveIdentityContext, type AuthenticatedIdentity, type IdentityContextRepository, type ResolvedIdentityContext } from '@modules/module-15-identity'
++import { describe, expect, it, vi } from 'vitest'
++import { PostgresIdentityContextRepository, resolveIdentityContext, type AuthenticatedIdentity, type IdentityContextRepository, type ResolvedIdentityContext } from '@modules/module-15-identity'
+ 
+ const identity: AuthenticatedIdentity = { provider: 'clerk', subject: 'user_task06' }
+ const context: ResolvedIdentityContext = {
+@@ -39,4 +39,24 @@     expect(new Set(results.map((item) => item.workspace.id))).toEqual(new Set(['w']))
+     expect(new Set(results.map((item) => item.membership.id))).toEqual(new Set(['m']))
+   })
++
++  it('fails closed instead of reprovisioning an identity whose membership is missing', async () => {
++    const statements: string[] = []
++    const client = {
++      query: vi.fn(async (sql: string) => {
++        statements.push(sql)
++        if (sql.includes('FROM module_15.identities i')) return { rows: [] }
++        if (sql.includes('SELECT id FROM module_15.identities')) return { rows: [{ id: 'identity-existing' }] }
++        return { rows: [] }
++      }),
++      release: vi.fn(),
++    }
++    const repository = new PostgresIdentityContextRepository({
++      connect: async () => client,
++    } as never)
++
++    await expect(repository.resolveOrProvision(identity)).rejects.toMatchObject({ code: 'TENANT_ACCESS_DENIED' })
++    expect(statements.some((sql) => /INSERT INTO module_15\.accounts/i.test(sql))).toBe(false)
++    expect(statements).toContain('ROLLBACK')
++  })
+ })
+Bash Command
+cd /home/user/webapp && npm run typecheck && npm run lint
+Lihat
+🔄 Background Task Started
+Shell ID: bash_2f139f5c
+Command: cd /home/user/webapp && npm run typecheck && npm run lint
+Status: running
+Status: running
+Bash Command
+cd /home/user/webapp && npx vitest run tests/unit/identity-context.test.ts tests/unit/authorization.test.ts tests/integration/opportunity-authorization-api.test.ts
+Lihat
+🔄 Background Task Started
+Shell ID: bash_3f6ddf3a
+Command: cd /home/user/webapp && npx vitest run tests/unit/identity-context.test.ts tests/unit/authorization.test.ts tests/integration/opportunity-authorization-api.test.ts
+Status: running
+Status: running
+Bash Output
+Lihat
+Bash Output
+Lihat
+Bash Command
+cd /home/user/webapp && npm run verify && git diff --check && git status --short
+Lihat
+🔄 Background Task Started
+Shell ID: bash_b7e835e4
+Command: cd /home/user/webapp && npm run verify && git diff --check && git status --short
+Status: running
+Status: running
+Bash Output
+Lihat
+Bash Output
+Lihat
+Bash Output
+Lihat
+Bash Output
+Lihat
+Berpikir Mendalam
+Total: 7 Tugas
+3 tugas yang harus dilakukan tersisa
+Audit repository, branch, Task 06 architecture, migrations, tests, and security hygiene
+Design and implement minimal Task 07 RBAC authorization foundation
+Create and verify forward-only database migration
+Run focused security, tenant-isolation, regression, and full verification tests
+Commit Task 07 changes and push main to existing GitHub repository
+Configure BYOK Cloudflare secrets/migrations, deploy, and verify production
+Produce exact final implementation and verification report
+Bash Command
+cd /home/user/webapp && git add README.md migrations src tests && git diff --cached --check && git diff --cached --stat && git commit -m "feat(task-07): establish authorization and rbac foundation" && git rev-parse HEAD && git status --short --branch
+Lihat
+ README.md                                          |  38 ++++--
+ migrations/0004_module_16_authorization_rbac.sql   |  29 +++++
+ migrations/README.md                               |   6 +-
+...
+ create mode 100644 tests/integration/opportunity-authorization-api.test.ts
+ create mode 100644 tests/unit/authorization.test.ts
+9d0a6bcb7c05524e45acb0b5aafb44c6ce1679cf
+## main...origin/main [ahead 1]
+Exit Code: 0
+Bash Command
+cd /home/user/webapp && git push origin main && git fetch origin main && printf 'local=' && git rev-parse HEAD && printf 'remote=' && git rev-parse origin/main && git status --short --branch
+Lihat
+To https://github.com/Sparkmind-obp-off/Affiliate.os.git
+   3d2b4e5..9d0a6bc  main -> main
+From https://github.com/Sparkmind-obp-off/Affiliate.os
+ * branch            main       -> FETCH_HEAD
+local=9d0a6bcb7c05524e45acb0b5aafb44c6ce1679cf
+remote=9d0a6bcb7c05524e45acb0b5aafb44c6ce1679cf
+## main...origin/main
+Exit Code: 0
+Berpikir Mendalam
+Total: 7 Tugas
+2 tugas yang harus dilakukan tersisa
+Audit repository, branch, Task 06 architecture, migrations, tests, and security hygiene
+Design and implement minimal Task 07 RBAC authorization foundation
+Create and verify forward-only database migration
+Run focused security, tenant-isolation, regression, and full verification tests
+Commit Task 07 changes and push main to existing GitHub repository
+Configure BYOK Cloudflare secrets/migrations, deploy, and verify production
+Produce exact final implementation and verification report
+Bash Command
+cd /home/user/webapp && npm run build && npx wrangler pages deploy dist --project-name affiliate-os --branch main --commit-hash "$(git rev-parse HEAD)" --commit-dirty=false
+Exit Code: unknown
+Saldo kredit Anda negatif. Run ini telah dihentikan. Silakan isi ulang untuk melanjutkan. upgrade
+
+Pratinjau / Penjelajah File / Pengaturan / Publikasi / Tutorial
+
+
+GPT-5.6 Sol"
+ https://www.genspark.ai/agents?id=62581db6-f2de-4d27-bae1-1e96261dc60d#:~:text=Code,GPT%2D5.6%20Sol
